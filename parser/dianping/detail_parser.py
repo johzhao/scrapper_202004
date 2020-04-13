@@ -10,7 +10,6 @@ from lxml import etree
 from lxml.etree import _Element
 
 import config
-from model.shop_info import ShopInfo
 from parser.dianping.font_parser import FontParser
 from parser.dianping.shop_detail_css_parser import ShopDetailCSSParser
 from parser.parser import Parser

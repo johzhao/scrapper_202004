@@ -11,7 +11,6 @@ from lxml import etree
 # noinspection PyProtectedMember
 from lxml.etree import _Element
 
-from model.shop_review import ShopReview
 from parser.dianping.review_css_parser import ReviewCSSParser
 from parser.dianping.svg_parser import SvgParser
 from parser.parser import Parser
