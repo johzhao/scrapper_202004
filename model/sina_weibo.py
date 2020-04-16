@@ -5,7 +5,6 @@ from mongoengine import StringField
 
 
 class SinaWeibo(Document):
-    id = IntField(required=True, primary_key=True)
     keyword = StringField(required=True)
     url = StringField()
     title = StringField()
@@ -18,6 +17,6 @@ class SinaWeibo(Document):
     created = DateTimeField()
 
     def __str__(self):
-        return (f'<SinaWeibo id={self.id}, keyword={self.keyword}, url={self.url}, title={self.title}, '
-                f'username={self.username}>, publish={self.publish}, forward_count={self.forward_count} '
+        return (f'<SinaWeibo keyword={self.keyword}, url={self.url}, title={self.title}, '
+                f'username={self.username}, publish={self.publish}, forward_count={self.forward_count} '
                 f'comment_count={self.comment_count}, favor_count={self.favor_count}')

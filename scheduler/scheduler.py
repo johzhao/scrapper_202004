@@ -59,7 +59,8 @@ class Scheduler(threading.Thread):
             self.task_queue.drop_top_task(task.type_)
 
             # 等待指定的秒数+-2s
-            delay = config.DOWNLOAD_DELAY + random.randint(20, 50) / 10
+            # delay = config.DOWNLOAD_DELAY + random.randint(20, 50) / 10
+            delay = config.DOWNLOAD_DELAY
             logger.info(f'Delay for {delay} seconds.')
             time.sleep(delay)
 
