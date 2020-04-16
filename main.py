@@ -4,7 +4,7 @@ from mongoengine import connect
 import urllib.parse
 
 import config
-from export.export import export_shops_to_excel, export_reviews_to_excel
+from export.export import export_task_1_and_2
 from model.sina_topic import SinaTopic
 
 log_format = ' %(asctime)s - %(levelname)s - %(filename)s - %(lineno)s - %(message)s'
@@ -15,12 +15,6 @@ from scheduler.scheduler import Scheduler
 logger = logging.getLogger(__name__)
 
 
-# def add_review_tasks(scheduler: Scheduler):
-#     connect(config.MONGO_DATABASE, host=config.MONGO_HOST, port=config.MONGO_PORT)
-#     for info in ShopInfo.objects:
-#         print(info)
-#         scheduler.append_url(f'https://www.dianping.com/shop/{info.id}/review_all?queryType=sortType&queryVal=latest',
-#                              'comment_first', f'https://www.dianping.com/shop/{info.id}')
 def add_topic_search_tasks(scheduler: Scheduler):
     for index in range(50):
         url = ''
@@ -36,6 +30,18 @@ def add_topic_search_tasks(scheduler: Scheduler):
     pass
 
 
+def add_weibo_hot_search_tasks(scheduler: Scheduler):
+    for index in range(50):
+        keyword = urllib.parse.quote(config.KEYWORD)
+        if index == 0:
+            url = f'https://s.weibo.com/weibo?q={keyword}&xsort=hot&suball=1&timescope=custom:2020-01-10-0:2020-04-10-23&Refer=g'
+            reference_url = ''
+        else:
+            url = f'https://s.weibo.com/weibo?q={keyword}&xsort=hot&suball=1&timescope=custom:2020-01-10-0:2020-04-10-23&Refer=g&page={index}'
+            reference_url = f'https://s.weibo.com/weibo?q={keyword}&xsort=hot&suball=1&timescope=custom:2020-01-10-0:2020-04-10-23&Refer=g&page={index-1}'
+        scheduler.append_url(url, '', reference_url)
+
+
 def add_topic_detail_tasks(scheduler: Scheduler):
     connect(config.MONGO_DATABASE, host=config.MONGO_HOST, port=config.MONGO_PORT)
     urls = set()
@@ -48,8 +54,7 @@ def add_topic_detail_tasks(scheduler: Scheduler):
 
 
 def export():
-    export_shops_to_excel('./output/shops.xls')
-    export_reviews_to_excel('./output/reviews.xls')
+    export_task_1_and_2('./output/task_1_2.xlsx')
     pass
 
 
@@ -59,11 +64,12 @@ def main():
 
     # add_topic_search_tasks(scheduler)
     # add_topic_detail_tasks(scheduler)
+    # add_weibo_hot_search_tasks(scheduler)
 
-    scheduler.start()
-    scheduler.join()
+    # scheduler.start()
+    # scheduler.join()
 
-    # export()
+    export()
 
 
 if __name__ == '__main__':
