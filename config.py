@@ -11,7 +11,7 @@ HEADERS = {
 
 MONGO_HOST = 'localhost'
 MONGO_PORT = 27017
-MONGO_DATABASE = 'weibo'
+MONGO_DATABASE = 'weibo_task_3'
 
 
 REDIS_DB_URL = 'redis://localhost:6379'

@@ -4,7 +4,7 @@ from mongoengine import connect
 import urllib.parse
 
 import config
-from export.export import export_task_1_and_2
+from export.export import export_task_1_and_2, export_task_3
 from model.sina_topic import SinaTopic
 
 log_format = ' %(asctime)s - %(levelname)s - %(filename)s - %(lineno)s - %(message)s'
@@ -54,7 +54,7 @@ def add_topic_detail_tasks(scheduler: Scheduler):
 
 
 def export():
-    export_task_1_and_2('./output/task_1_2.xlsx')
+    export_task_3('./output/task_1_2.xlsx')
     pass
 
 

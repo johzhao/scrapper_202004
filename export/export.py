@@ -36,6 +36,21 @@ def export_task_1_and_2(filepath: str):
                 index += 1
 
 
+def export_task_3(filepath: str):
+    with xlsxwriter.Workbook(filepath) as wbk:
+        sheet = wbk.add_worksheet('task_3')
+        _export_task_3_title(sheet)
+
+        objects = SinaWeibo.objects().all()
+        start_datetime = datetime.datetime(2020, 1, 10)
+        end_datetime = datetime.datetime(2020, 4, 11)
+        index = 1
+        for weibo in objects:
+            if start_datetime <= weibo.publish <= end_datetime:
+                _export_task_3(sheet, index, weibo)
+                index += 1
+
+
 def _export_topic_title(sheet: xlsxwriter.worksheet.Worksheet):
     sheet.write(0, 0, '关键字')
     sheet.write(0, 1, '话题')
@@ -94,6 +109,33 @@ def _export_weibo(sheet: xlsxwriter.worksheet.Worksheet, row: int, weibo: SinaWe
     col = _write_data(sheet, row, col, weibo.forward_count)
     col = _write_data(sheet, row, col, weibo.comment_count)
     _write_data(sheet, row, col, weibo.favor_count)
+
+
+def _export_task_3_title(sheet: xlsxwriter.worksheet.Worksheet):
+    sheet.write(0, 0, '关键字')
+    sheet.write(0, 1, '爬取时间')
+    sheet.write(0, 2, '微博链接')
+    sheet.write(0, 3, '转发数')
+    sheet.write(0, 4, '评论数')
+    sheet.write(0, 5, '点赞数')
+    sheet.write(0, 6, '标题')
+    sheet.write(0, 7, '内容')
+    sheet.write(0, 8, '用户名')
+    sheet.write(0, 9, '发表时间')
+
+
+def _export_task_3(sheet: xlsxwriter.worksheet.Worksheet, row: int, weibo: SinaWeibo):
+    col = 0
+    col = _write_data(sheet, row, col, weibo.keyword)
+    col = _write_data(sheet, row, col, weibo.created)
+    col = _write_data(sheet, row, col, weibo.url)
+    col = _write_data(sheet, row, col, weibo.forward_count)
+    col = _write_data(sheet, row, col, weibo.comment_count)
+    col = _write_data(sheet, row, col, weibo.favor_count)
+    col = _write_data(sheet, row, col, weibo.title)
+    col = _write_data(sheet, row, col, weibo.content)
+    col = _write_data(sheet, row, col, weibo.username)
+    _write_data(sheet, row, col, weibo.publish)
 
 
 def _write_data(sheet: xlsxwriter.worksheet.Worksheet, row: int, col: int, data) -> int:
