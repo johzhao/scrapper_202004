@@ -19,7 +19,7 @@ class MockParserDelegate:
         logger.info(f'Save type {type_}, content {content}')
         pass
 
-    def append_url(self, url: str, type_: str, reference: str):
+    def append_url(self, url: str, type_: str, reference: str, metadata: dict = None):
         logger.info(f'Append url {url}, type {type_}, reference {reference}')
         pass
 
@@ -64,7 +64,14 @@ def test_cnr_search_list_parser():
     parser.parse(url, data)
 
 
-def _load_html_file(filepath: str):
-    with open(filepath, 'r', encoding='utf8') as html_file:
+def test_people_search_list_parser():
+    url = 'http://search.people.com.cn/cnpeople/news/getNewsResult.jsp'
+    data = _load_html_file('./test_files/people_list.html', 'gbk')
+    parser = get_parser(url, MockParserDelegate())
+    parser.parse(url, data)
+
+
+def _load_html_file(filepath: str, encodeing='utf-8'):
+    with open(filepath, 'r', encoding=encodeing) as html_file:
         data = html_file.read()
     return data

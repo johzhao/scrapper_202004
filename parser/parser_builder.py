@@ -5,6 +5,7 @@ from .parser import Parser
 from .sina_weibo import search_list_parser
 from .sina_weibo import topic_list_parser
 from .cnr import cnr_list_parser
+from .people import people_list_parser
 
 
 def get_parser(url: str, delegate) -> Optional[Parser]:
@@ -16,5 +17,7 @@ def get_parser(url: str, delegate) -> Optional[Parser]:
             return topic_list_parser.TopicListParser(delegate)
     elif url_components.hostname == 'was.cnr.cn':
         return cnr_list_parser.CnrListParser(delegate)
+    elif url_components.hostname == 'search.people.com.cn':
+        return people_list_parser.PeopleListParser(delegate)
 
     raise Exception(f'The is no supported parser for {url}')

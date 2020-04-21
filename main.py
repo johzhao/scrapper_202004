@@ -71,6 +71,15 @@ def add_cnr_search_task(scheduler: Scheduler):
         })
 
 
+def add_people_search_tasks(scheduler: Scheduler):
+    for keyword in KEYWORDS:
+        search_key = urllib.parse.quote(keyword, encoding='gbk')
+        url = f'http://search.people.com.cn/cnpeople/search.do?pageNum=2&keyword={search_key}&siteName=news&facetFlag=true&nodeType=belongsId&nodeId=0'
+        scheduler.append_url(url, '', '', {
+            'keyword': keyword
+        })
+
+
 def export():
     export_task_3('./output/task_1_2.xlsx')
     pass
@@ -84,6 +93,7 @@ def main():
     # add_topic_detail_tasks(scheduler)
     # add_weibo_hot_search_tasks(scheduler)
     # add_cnr_search_task(scheduler)
+    # add_people_search_tasks(scheduler)
 
     scheduler.start()
     scheduler.join()

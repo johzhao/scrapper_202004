@@ -6,7 +6,7 @@ class Task:
     @classmethod
     def from_string(cls, content: str) -> 'Task':
         data = json.loads(content)
-        return Task(data.get('url'), data.get('type'), data.get('reference'))
+        return Task(data.get('url'), data.get('type'), data.get('reference'), data.get('metadata', {}))
 
     def __init__(self, url: str, type_: str, reference: str, metadata=None):
         self.url = url
