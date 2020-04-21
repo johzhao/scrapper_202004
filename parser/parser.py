@@ -7,5 +7,5 @@ class Parser(abc.ABC):
         self.delegate = delegate
 
     @abc.abstractmethod
-    def parse(self, url: str, content: str):
+    def parse(self, url: str, content: str, metadata: dict):
         return NotImplemented

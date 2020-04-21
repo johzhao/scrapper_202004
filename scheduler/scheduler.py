@@ -1,8 +1,6 @@
 import logging
-import random
 import threading
 import time
-from typing import Optional
 
 from mongoengine import Document
 
@@ -28,8 +26,8 @@ class Scheduler(threading.Thread):
     def save_content(self, content: Document, type_: str):
         self.storage.save_content(content, type_)
 
-    def append_url(self, url: str, type_: str, reference: str):
-        self.task_queue.push_task(Task(url, type_, reference))
+    def append_url(self, url: str, type_: str, reference: str, metadata=None):
+        self.task_queue.push_task(Task(url, type_, reference, metadata))
 
     def run(self) -> None:
         while True:
@@ -48,7 +46,7 @@ class Scheduler(threading.Thread):
             content = self.downloader.download_url(task.url, task.reference)
             try:
                 parser = get_parser(task.url, self)
-                parser.parse(task.url, content)
+                parser.parse(task.url, content, task.metadata)
             except Exception as e:
                 with open('exception.html', 'w') as ofile:
                     ofile.write(content)

@@ -11,14 +11,14 @@ HEADERS = {
 
 MONGO_HOST = 'localhost'
 MONGO_PORT = 27017
-MONGO_DATABASE = 'weibo_task_3'
+MONGO_DATABASE = 'cnr_items'
 
 
 REDIS_DB_URL = 'redis://localhost:6379'
 REDIS_DB_DATABASE = 0
 
 
-DOWNLOAD_DELAY = 5
+DOWNLOAD_DELAY = 1
 
 KEYWORD = '新冠'
 # KEYWORD = '肺炎'

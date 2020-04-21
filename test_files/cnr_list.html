@@ -1,0 +1,605 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>央广搜索</title>
+<link href="css/was.css" rel="stylesheet" type="text/css"/>
+</head>
+<body style="width: 960px;">
+<div id="main">
+<div id="header">
+<script type="text/javascript" src="js/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="js/suggest-yui2.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.min.js"></script>
+<script type="text/javascript">
+    window.onload = function()
+    {
+        var ispromptshown = $.cookie('ispromptshown');
+        if (ispromptshown == "false") return ;
+
+        var dataUrl = 'searchsuggest?AppServerEncoding=iso-8859-1&StringEncoding=utf-8&result=false';
+        new TRSWAS.Suggest('textfield', dataUrl,
+        {
+            useShim:false,
+            resultFormat: '约%result%条结果'
+        });
+    };
+</script>
+
+<script type="text/javascript">
+    function goto(channelid)
+    {
+        if (document.searchform.searchword.value.trim()==''){
+            if(channelid=='282695'){
+                 window.location.href='news.jsp';
+            }
+            else{
+            window.location.href='index.jsp?channelid='+channelid;
+            }
+        }
+        else{
+            document.searchform.channelid.value = channelid;
+            if(channelid=='261346'){
+                document.searchform.perpage.value = 16;
+            }
+            else{
+                document.searchform.perpage.value = '';
+            }
+            document.searchform.submit();
+        }
+    }
+    String.prototype.trim = function () {
+        return this.replace(/^\s*/, "").replace(/\s*$/, "");
+    }
+    function checkInput()
+    {
+        if (document.searchform.searchword.value.trim()==''){
+            document.searchform.searchword.focus();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+</script>
+<form name="searchform" action="search" method="post" style="margin-bottom:15px;"  onsubmit="return checkInput();">
+<!--div style="float: right">
+    
+	<a href="login.jsp" class="toplink"><img src="images/ico1.png" width="10" height="12" border="0"/>登录</a>&nbsp;&nbsp;
+    
+</div-->
+<div style="clear: both;"></div>
+<table>
+	<tr>
+		<td id="logo" rowspan="2"><a href="index.jsp"><img src="images/logo.gif" alt=""/></a></td>
+		<td>
+		<ul id="g_tab">
+			<li class="index_tab_div_h"><a href="#" onclick="goto(282695)">新 闻 </a></li>
+			<li class="index_tab_div_s"><a href="#" onclick="goto(234439)">网 页 </a></li>
+			<li class="index_tab_div_h" style="display:none"><a href="#" onclick="goto(261346)">图 片 </a></li>
+			<li class="index_tab_div_h"><a href="hotword_list.jsp">热搜排行榜 </a></li>
+		</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><input type="hidden" name="channelid" value="234439">
+            <input type="text" id="textfield" name="searchword" class="forminput" value="疫情"/>
+            <input type="hidden" name="perpage" value="">
+            <input type="hidden" name="templet" value="">
+            <input type="hidden" name="token" value="">
+            <input type="submit" value="" class="submitbutton"/>
+            <a href="preferences.jsp?goto=search&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=" class="searchbarlink">设置 </a>
+            <a href="advanced.jsp" class="searchbarlink">高级搜索 </a>
+        </td>
+	</tr>
+</table>
+<div style="clear: both; margin-bottom: 6px;"></div>
+</form>
+</div>
+<div class="column" id="column1" style="width: 720px;">
+<div class="outline">
+<div style="float: left; margin-bottom: 15px;"></div>
+
+         <div style="float: right; margin-bottom: 15px;">找到相关结果约97617条，用时0.125秒
+</div>
+
+<div style="clear: both;"></div>
+
+<script language="javascript">
+	function setAdvancedWords()
+	{
+	    document.outlinesearchform.andsen.value = '';
+	    document.outlinesearchform.total.value = '';
+	    document.outlinesearchform.orsen.value = '';
+	    document.outlinesearchform.exclude.value = '';
+	}
+    function setSearchScope(type) {
+        setAdvancedWords();
+        document.outlinesearchform.searchscope.value = type;
+        document.outlinesearchform.submit();
+
+    }
+    function setTimeScope(type) {
+        setAdvancedWords();
+        document.outlinesearchform.timescope.value = type;
+        document.outlinesearchform.timescopecolumn.value = 'docreltime';
+        document.outlinesearchform.submit();
+
+    }
+    function setOrderBy(type) {
+        setAdvancedWords();
+        document.outlinesearchform.orderby.value = type;
+        document.outlinesearchform.submit();
+    }
+
+</script>
+<table>
+<tr>
+<td class="searchtools">
+    <table class="searchtoolstable">
+        <tr>
+            <td id="tdscopenolimit">
+            	<a href="#" onclick="setSearchScope('');">所有结果</a>
+            </td>
+        </tr>
+        <tr>
+            <td id="tdscopetitle" >
+            	<a href="#" onclick="setSearchScope('DOCTITLE');">标题</a>
+            </td>
+        </tr>
+        <tr>
+            <td id="tdscopecontent">
+            	<a href="#" onclick="setSearchScope('DOCCONTENT');">正文</a>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td id="tdtimenolimit">
+            	<a href="#" onclick="setTimeScope('');">时间不限</a>
+            </td>
+        </tr>
+        <tr>
+            <td id="tdtime1day" >
+            	<a href="#" onclick="setTimeScope('date');">1天内</a>
+            </td>
+        </tr>
+        <tr>
+            <td id="tdtime7days">
+            	<a href="#" onclick="setTimeScope('week');">1周内</a>
+            </td>
+        </tr>
+        <tr>
+            <td id="tdtime30days">
+            	<a href="#" onclick="setTimeScope('month');">1个月内</a>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td id="tdsortrelevance" >
+            	<a href="#" onclick="setOrderBy('RELEVANCE');">按相关度排序</a>
+            </td>
+        </tr>
+        <tr>
+            <td id="tdsorttime">
+            	<a href="#" onclick="setOrderBy('-docreltime');">按时间排序</a>
+            </td>
+        </tr>
+    </table>
+</td>
+<td class="searchresult">
+
+<ol>
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/newscenter/native/gd/20200129/t20200129_524953159.shtml" class="searchresulttitle" target="_blank">东湖评论：怀揣“四颗心” 共同抗击<font color=#FF0000>疫情</font></a>
+				
+            </div>
+            <div>...
+　　当前，抗击新型冠状病毒感染的肺炎<font color=#FF0000>疫情</font>正值关键时期，坚定必胜信念，万众一心，众志成城，携手并肩，共同作战，尤为重要。
+　　坚定必胜的信心。面对突如其来的新型冠状病毒感染的肺炎<font color=#FF0000>疫情</font>，我们别无选择，唯有坚定必胜的信心，勇敢迎战，才能夺取最终的胜利。信心来自于党中央的坚强领导，来自于医学专家的...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/newscenter/native/gd/20200129/t2... </span>&nbsp;&nbsp;2020.01.29 22:07:00&nbsp;&nbsp;<a href="http://www.cnr.cn/newscenter/native/gd/20200129/t20200129_524953159.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/newscenter/native/gd/20200129/t20200129_524953157.shtml" class="searchresulttitle" target="_blank">东湖评论：无疆大爱，让抗疫英雄惺惺相惜</a>
+				
+            </div>
+            <div>...
+　　这个冬天，冷也不冷；这个春节，静也不静。新型冠状病毒感染的肺炎<font color=#FF0000>疫情</font>笼罩的江城显得异常冷清，武汉人也显得格外忐忑。但越是危难时刻，就越能点燃我们的抗疫信心，凝聚起我们的团结力量，激发我们的奋斗精神。于是，那些冲锋在前的“逆行者”、披星戴月的“后勤者”、顾全大局的“留守者”用爱点亮了整个江...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/newscenter/native/gd/20200129/t2... </span>&nbsp;&nbsp;2020.01.29 22:07:00&nbsp;&nbsp;<a href="http://www.cnr.cn/newscenter/native/gd/20200129/t20200129_524953157.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/newscenter/native/gd/20200129/t20200129_524953156.shtml" class="searchresulttitle" target="_blank">【地评线】紫金e评：危难时刻，党员干部就要 “豁得出”</a>
+				
+            </div>
+            <div>...
+　　“各级党委要在这场严峻斗争的实践中考察识别干部，激励引导广大党员、干部在危难时刻挺身而出、英勇奋斗、扎实工作，经受住考验，紧紧依靠人民群众坚决打赢<font color=#FF0000>疫情</font>防控阻击战。”“各级党组织和广大党员干部必须牢记人民利益高于一切，不忘初心、牢记使命，团结带领广大人民群众坚决贯彻落实党中央决策部署，全...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/newscenter/native/gd/20200129/t2... </span>&nbsp;&nbsp;2020.01.29 22:06:00&nbsp;&nbsp;<a href="http://www.cnr.cn/newscenter/native/gd/20200129/t20200129_524953156.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/shanghai/tt/20200129/t20200129_524953155.shtml" class="searchresulttitle" target="_blank">延长春节假期算节假日还是休息日？</a>
+				
+            </div>
+            <div>...院办公厅于1月26日发布的关于延长2020年春节假期的通知规定，延长2020春节假期至2月2日（农历正月初九），2月3日（星期一）正常上班，同时也明确了<font color=#FF0000>疫情</font>防控休假的职工，按照有关政策保障落实。
+　　费予清说，市政府2020年1月27日发布了本市延迟上海市企业复工和学校开学的通知，明确规定上...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/shanghai/tt/20200129/t20200129_5... </span>&nbsp;&nbsp;2020.01.29 21:54:00&nbsp;&nbsp;<a href="http://www.cnr.cn/shanghai/tt/20200129/t20200129_524953155.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/gd/jjzx/20200129/t20200129_524953154.shtml" class="searchresulttitle" target="_blank">九元航空免费承运驰援抗疫医护工作者</a>
+				
+            </div>
+            <div>...
+　　央广网广州1月29日消息（记者 周羽）继近日开通抗击新型肺炎援助物资免费运输绿色通道之后，主基地位于广州的九元航空28日宣布：<font color=#FF0000>疫情</font>防控期间，所有九元航空执飞的国内、国际和地区航线上，均可免费承运抗疫医护工作者。
+　　“为简化手续，有需要的抗疫医护工作者可以将任何一项参加<font color=#FF0000>疫情</font>防控的证明材...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/gd/jjzx/20200129/t20200129_52495... </span>&nbsp;&nbsp;2020.01.29 21:59:00&nbsp;&nbsp;<a href="http://www.cnr.cn/gd/jjzx/20200129/t20200129_524953154.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/newscenter/dj/20200129/t20200129_524953146.shtml" class="searchresulttitle" target="_blank">全国妇联系统紧急动员防疫物资驰援湖北</a>
+				
+            </div>
+            <div>...
+　　央广网北京1月29日消息（记者孙冰洁）眼下，正是<font color=#FF0000>疫情</font>防控的关键时期。记者今日（29日）从全国妇联了解到，全国妇联在接到湖北妇联提供的物资需求清单后，第一时间作出安排部署，将各类急需的防疫物资送到一线部门和妇女、家庭、社区手中。
+　　1月25日，由浙江省妇联主管的浙江省妇女儿童基金会发起...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/newscenter/dj/20200129/t20200129... </span>&nbsp;&nbsp;2020.01.29 21:40:00&nbsp;&nbsp;<a href="http://www.cnr.cn/newscenter/dj/20200129/t20200129_524953146.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/nx/xwdd/20200129/t20200129_524953099.shtml" class="searchresulttitle" target="_blank">银川市互联网+医疗 助力全国抗击<font color=#FF0000>疫情</font></a>
+				
+            </div>
+            <div>...
+　　    央广网银川1月29日消息 （记者许新霞）今天，由银川市大数据产业发展服务中心发起倡议，在银川市落户的银川智慧互联网医院、银川云海翼互联网医院等9家互联网医院自愿组织“网络义诊”活动，在各自的互联网诊疗平台上针对<font color=#FF0000>疫情</font>设立诊疗专区，面向全国患者提供远程诊疗服务。
+　　近期，新型冠状...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/nx/xwdd/20200129/t20200129_52495... </span>&nbsp;&nbsp;2020.01.29 20:58:00&nbsp;&nbsp;<a href="http://www.cnr.cn/nx/xwdd/20200129/t20200129_524953099.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/jx/caijing/jinrong/20200129/t20200129_524953153.shtml" class="searchresulttitle" target="_blank">江西建行全力以赴助力打赢<font color=#FF0000>疫情</font>防控阻击战</a>
+				
+            </div>
+            <div>...
+　　央广网南昌1月29日消息（记者胡斐 通讯员罗玉婷）<font color=#FF0000>疫情</font>就是命令，防控就是责任。建行江西省分行1月27日召开<font color=#FF0000>疫情</font>防控专题会议，研究布置全省建行<font color=#FF0000>疫 情</font>防控具体工作，分行把<font color=#FF0000>疫情</font>防控工作作为当前最重要的工作，切实抓深抓细抓好，按照总行出台的支持<font color=#FF0000>疫情</font>防控金融服务“十项措施”有关要求，全力以赴助力...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/jx/caijing/jinrong/20200129/t202... </span>&nbsp;&nbsp;2020.01.29 21:54:00&nbsp;&nbsp;<a href="http://www.cnr.cn/jx/caijing/jinrong/20200129/t20200129_524953153.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/jx/2011jxfw/jctp/20200129/t20200129_524953148.shtml" class="searchresulttitle" target="_blank">吴怡清，怀着身孕战“疫”情</a>
+				
+            </div>
+            <div>...
+　　央广网新余1月29日消息（记者胡啸 通讯员陈辉） 怀孕7个月，只身开车11个小时，从赣州到新余，只为了去抗击肺炎<font color=#FF0000>疫情</font>！
+　　回来后的这段时间，她每天需要接诊30个左右的病人。除了白天的发热门诊的接诊，晚上还要值班。
+　　没办法，这种时候的医院，太需要医生了。
+　　过年前，为了能和家人吃...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/jx/2011jxfw/jctp/20200129/t20200... </span>&nbsp;&nbsp;2020.01.29 21:41:00&nbsp;&nbsp;<a href="http://www.cnr.cn/jx/2011jxfw/jctp/20200129/t20200129_524953148.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+    
+        <li>
+            <div>
+               <a href="http://www.cnr.cn/nx/nxjd/20200129/t20200129_524953147.shtml" class="searchresulttitle" target="_blank">银川市组成190辆志愿服务车队 保障一线医疗人员出行</a>
+				
+            </div>
+            <div>...
+　　央广网银川1月29日消息 （记者许新霞） 为贯彻落实银川市委、政府对新型冠状病毒感染的肺炎<font color=#FF0000>疫情</font>防控总体部署，银川市城乡所有客车班线以及公交线路于今日0时起暂停营运。为全力保障一线工作人员及时到岗、有序做好病人救治，为银川市三区各定点救治医疗机构和设置发热门诊的医疗机构人员正常出行提供服...<br/>
+                <span class="searchresulturl">http://www.cnr.cn/nx/nxjd/20200129/t20200129_52495... </span>&nbsp;&nbsp;2020.01.29 20:58:00&nbsp;&nbsp;<a href="http://www.cnr.cn/nx/nxjd/20200129/t20200129_524953147.shtml"  target="_blank">原始网页</a></div>
+
+        </li>
+    
+
+</ol>
+<div style="max-width: 100%;" id="outlinebar"><nobr><a class="first-page" href="search?page=1&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=" target="_self">首页</a><a class="prev-page" href="search?page=4999&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=" target="_self">上一页</a><a target="_self" href="search?page=4996&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=">4996</a><a target="_self" href="search?page=4997&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=">4997</a><a target="_self" href="search?page=4998&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=">4998</a><a target="_self" href="search?page=4999&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=">4999</a><span class="current-page">5000</span><a target="_self" href="search?page=5001&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=">5001</a><a target="_self" href="search?page=5002&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=">5002</a><a target="_self" href="search?page=5003&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=">5003</a><a target="_self" href="search?page=5004&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=">5004</a><a target="_self" href="search?page=5005&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=">5005</a><a class="next-page" href="search?page=5001&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=" target="_self">下一页</a><a class="last-page" href="search?page=9762&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29&perpage=10&outlinepage=10&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=" target="_self">尾页</a></nobr></div>
+<div style="BACKGROUND-COLOR: #eff2fa; width:100%">
+	
+		</div>
+        <form action="search" method="post" style="vertical-align: bottom" name="outlinesearchform">
+		    <div style="margin-top:20px;">
+		        <input type="hidden" name="searchscope" value="">
+		        <input type="hidden" name="timescope" value="">
+		        <input type="hidden" name="timescopecolumn" value="">
+		        <input type="hidden" name="orderby" value="LIFO">
+		        <input type="hidden" name="channelid" value="234439">
+		        <input type="hidden" name="andsen" value="" />
+		        <input type="hidden" name="total" value="" />
+		        <input type="hidden" name="orsen" value="" />
+		        <input type="hidden" name="exclude" value="" />
+		        <input name="searchword" type="text" class="forminputshort" value="疫情"/>
+		        <input type="hidden" name="perpage" value="">
+		        <input type="hidden" name="templet" value="">
+		        <input type="hidden" name="token" value="">
+		        <input type="submit" class="submitbutton" value=""/>
+		    </div>
+		</form>
+
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+
+    var searchScope = '';
+    var timeScope = '';
+    var orderBy = 'LIFO';
+
+    if(searchScope == ''){
+        document.getElementById("tdscopenolimit").className="searchtoolsactive" ;
+    }
+    else if(searchScope=='doctitle'){
+        document.getElementById("tdscopetitle").className="searchtoolsactive" ;
+    }
+    else if(searchScope=='DOCCONTENT'){
+        document.getElementById("tdscopecontent").className="searchtoolsactive" ;
+    }
+
+    if(timeScope==''){
+        document.getElementById("tdtimenolimit").className="searchtoolsactive" ;
+    }
+    else if(timeScope=='date'){
+        document.getElementById("tdtime1day").className="searchtoolsactive" ;
+    }
+    else if(timeScope=='week'){
+        document.getElementById("tdtime7days").className="searchtoolsactive" ;
+    }
+    else if(timeScope=='month'){
+        document.getElementById("tdtime30days").className="searchtoolsactive" ;
+    }
+
+    if(orderBy=='RELEVANCE'){
+        document.getElementById("tdsortrelevance").className="searchtoolsactive" ;
+    }
+    else if(orderBy=='-docreltime'){
+        document.getElementById("tdsorttime").className="searchtoolsactive" ;
+    }
+
+</script>
+</div>
+</div>
+<div class="column" id="column2" style="width: 240px;">
+
+<script type="text/javascript" src="js/swfobject.js"></script>
+<script>
+	function changeHotType(showtype)
+	{
+	 	if(showtype == "pic")
+	 	{
+	 	 	$("#hottxt").hide();
+	 	 	$("#hottagcloud").show();
+	 	}   
+	 	else
+	 	{
+	 	 	$("#hottxt").show();
+	 	 	$("#hottagcloud").hide();
+	 	}
+	}
+	jQuery(document).ready(function() {
+	    var flashvars =
+	    {
+	        data : "tagscloud/tagsdata.jsp?channelid=234439&perpage=10",
+	        auto : "true",
+	        fcolor : "1C1C1C",
+	        bcolor : "962096",
+	        tsize : "18"
+	    };
+	    var params =
+	    {
+	        allowFullScreen : "true",
+	        bgcolor : "#FFFFFF"
+	    }
+	    var attributes =
+	    {};
+	    attributes.id = "hottagcloud";
+	    swfobject.embedSWF("tagscloud/TagCloud.swf", "hottagcloud", "195", "195", "10.0.0", "tagscloud/expressInstall.swf", flashvars, params, attributes);
+	});
+</script>
+<div class="sidebar">
+<table class="sidebartable">
+	<tr>
+		<th><span>热搜词</span><span style="margin-left: 100px; font-size: 10pt"><a href="hotword_more.jsp?channelid=234439" target="_blank">更多&gt;&gt;</a></span></th>
+	</tr>
+	<tr>
+	<td>
+	<div>
+	<input type="radio" name="hot_type" value="pic" id="rad_hotpic" checked onclick="changeHotType(this.value)"><label for="rad_hotpic">图形</label>
+	<input type="radio" name="hot_type" value="text" id="rad_hottext" onclick="changeHotType(this.value)"><label for="rad_hottext">文字</label>
+	</div>
+	<div id="hottxt" style="display:none">
+	<table width="100%">
+	
+	    <tr>
+			<td>1. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E8%81%94%E5%90%88%E5%9B%BD">联合国</a> (532)</td>
+		</tr>
+	    
+	    <tr>
+			<td>2. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E7%94%B5%E5%BD%B1">电影</a> (532)</td>
+		</tr>
+	    
+	    <tr>
+			<td>3. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E5%A5%A5%E5%B7%B4%E9%A9%AC">奥巴马</a> (457)</td>
+		</tr>
+	    
+	    <tr>
+			<td>4. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E4%B8%AD%E5%9B%BD">中国</a> (452)</td>
+		</tr>
+	    
+	    <tr>
+			<td>5. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E4%B8%96%E5%8D%9A%E4%BC%9A">世博会</a> (346)</td>
+		</tr>
+	    
+	    <tr>
+			<td>6. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E8%B6%B3%E7%90%83">足球</a> (141)</td>
+		</tr>
+	    
+	    <tr>
+			<td>7. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E4%B8%96%E7%95%8C%E6%9D%AF">世界杯</a> (132)</td>
+		</tr>
+	    
+	    <tr>
+			<td>8. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E8%AE%B2%E5%BA%A7">讲座</a> (126)</td>
+		</tr>
+	    
+	    <tr>
+			<td>9. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E5%8C%97%E4%BA%AC">北京</a> (111)</td>
+		</tr>
+	    
+	    <tr>
+			<td>10. <a style="color:#1e50a2;" href="search?channelid=234439&searchword=%E4%B8%8A%E6%B5%B7">上海</a> (12)</td>
+		</tr>
+	    
+	</table>
+	</div>
+	<div id="hottagcloud" style="width:100%; text-align:center">
+	</div>
+	</td>
+	</tr>
+</table>
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	$.ajax({
+        type: "POST",
+        url: "classresult",
+        data: "showother=true&showtype=txt&classnum=5&classcol=CHNLNAME" + "&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29",
+        success: function(data, textStatus)
+        {
+        	$("#loading").remove();
+        	$("#showcr").show();
+        	var items = data.split("#");
+        	if (items.length == 0) return;
+        	
+        	for (var i = 0; i < items.length; i++)
+        	{
+	        	$("#classresult").append("<tr><td align='left'>" + items[i] + "</td></tr>");
+        	}
+        },
+        error:function (XMLHttpRequest, textStatus, errorThrown) 
+        {
+		}
+    });
+});
+function changeType(showtype)
+{
+ 	if(showtype == "pic")
+ 	{
+ 	 	$("#div_text").hide();
+ 	 	$("#div_pic").show();
+ 	}   
+ 	else
+ 	{
+ 	 	$("#div_text").show();
+ 	 	$("#div_pic").hide();
+ 	}
+}
+
+</script>
+<div class="sidebar">
+<table class="sidebartable">
+	<th>分类统计</th>	
+	<tr id="loading">
+		<td align="center"><img src="images/loading.gif" /></td>
+	</tr>
+	<tr id="showcr" style="display:none">
+		<td align="left">		
+		
+		<div>
+		<input type="radio" name="rad_type" value="text" id="rad_text" checked onclick="changeType(this.value)"><label for="rad_text">文字</label>
+		<input type="radio" name="rad_type" value="pic" id="rad_pic" onclick="changeType(this.value)"><label for="rad_pic">图形</label>
+		</div>		
+		<div id="div_text" >
+			<table id="classresult" style="width:100%">
+			</table>
+		</div>
+		<div id="div_pic" style="display:none; width:100%; text-align: center">
+			<a href="classresult?showother=true&showtype=pic&shape=pie&classnum=5&classcol=CHNLNAME&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29" target="_blank" title="查看大图"><img 
+			src="classresult?showother=true&showtype=pic&shape=pie&classnum=5&classcol=CHNLNAME&channelid=234439&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=LIFO&was_custom_expr=%28%E7%96%AB%E6%83%85%29" alt="分类统计" width="195" height="195"/></a>
+		</div>
+		
+		</td>		
+	</tr>	
+</table>
+</div>
+</div>
+<div class="column" id="column3" style="display: none;"></div>
+<div id="footer">
+<!--div style="background-color: #C6E0EF; color: #039; text-align: center; padding-top: 5px; padding-bottom: 5px;">
+    &copy;2010 北京拓尔思信息技术股份有限公司
+</div-->
+</div>
+</div>
+</body>
+</html>
+

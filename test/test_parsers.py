@@ -7,6 +7,7 @@ from parser.dianping.detail_parser import DetailParser
 from parser.dianping.list_parser import ListParser
 from parser.sina_weibo.search_list_parser import SearchListParser
 from parser.sina_weibo.topic_list_parser import TopicListParser
+from parser.parser_builder import get_parser
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -54,6 +55,13 @@ def test_topic_list_parser():
     data = _load_html_file('./test_files/topic_list.html')
     parser = TopicListParser(MockParserDelegate())
     parser.parse('https://s.weibo.com/topic?q=%E7%96%AB%E6%83%85&pagetype=topic&topic=1&Refer=weibo_topic&page=2', data)
+
+
+def test_cnr_search_list_parser():
+    url = 'http://was.cnr.cn/'
+    data = _load_html_file('./test_files/cnr_list.html')
+    parser = get_parser(url, MockParserDelegate())
+    parser.parse(url, data)
 
 
 def _load_html_file(filepath: str):
