@@ -83,6 +83,14 @@ def test_china_news_search_list_parser():
     parser.parse(task, data)
 
 
+def test_sina_news_search_list_parser():
+    url = 'https://search.sina.com.cn/?q=%E7%96%AB%E6%83%85&range=all&c=news&sort=time'
+    task = Task(url, '', '')
+    data = _load_html_file('./test_files/sina_news_list.html')
+    parser = get_parser(url, MockParserDelegate())
+    parser.parse(task, data)
+
+
 def _load_html_file(filepath: str, encodeing='utf-8'):
     with open(filepath, 'r', encoding=encodeing) as html_file:
         data = html_file.read()

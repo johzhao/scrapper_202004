@@ -104,6 +104,16 @@ def add_china_news_tasks(scheduler: Scheduler):
         scheduler.append_request_task(Task(url, '', '', method='POST', body=body, metadata=metadata))
 
 
+def add_sina_news_tasks(scheduler: Scheduler):
+    for keyword in KEYWORDS:
+        search_key = urllib.parse.quote(keyword)
+        url = f'https://search.sina.com.cn/?q={search_key}&range=all&c=news&sort=time'
+        metadata = {
+            'keyword': keyword,
+        }
+        scheduler.append_request_task(Task(url, '', '', metadata=metadata))
+
+
 def export():
     export_task_3('./output/task_1_2.xlsx')
     pass
@@ -119,6 +129,7 @@ def main():
     # add_cnr_search_task(scheduler)
     # add_people_search_tasks(scheduler)
     # add_china_news_tasks(scheduler)
+    # add_sina_news_tasks(scheduler)
 
     scheduler.start()
     scheduler.join()

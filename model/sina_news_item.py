@@ -3,7 +3,7 @@ from mongoengine import Document
 from mongoengine import StringField
 
 
-class ChinaNewsItem(Document):
+class SinaNewsItem(Document):
     url = StringField(primary_key=True, required=True)
     keyword = StringField(required=True)
     title = StringField(required=True)
@@ -12,4 +12,4 @@ class ChinaNewsItem(Document):
     created = DateTimeField()
 
     def __str__(self):
-        return f'<ChinaNews url={self.url}, keyword={self.keyword}, title={self.title}, publish={self.publish}'
+        return f'<Sina url={self.url}, keyword={self.keyword}, title={self.title}, publish={self.publish}'
