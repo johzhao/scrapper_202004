@@ -1,5 +1,7 @@
 import abc
 
+from model.task import Task
+
 
 class Parser(abc.ABC):
 
@@ -7,5 +9,5 @@ class Parser(abc.ABC):
         self.delegate = delegate
 
     @abc.abstractmethod
-    def parse(self, url: str, content: str, metadata: dict):
+    def parse(self, task: Task, content: str):
         return NotImplemented

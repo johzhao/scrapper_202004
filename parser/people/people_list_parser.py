@@ -11,6 +11,7 @@ from lxml import etree
 from lxml.etree import _Element
 
 from model.people_item import PeopleItem
+from model.task import Task
 from parser.parser import Parser
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ class PeopleListParser(Parser):
     def __init__(self, delegate):
         super().__init__(delegate)
 
-    def parse(self, url: str, content: str, metadata: dict):
+    def parse(self, task: Task, content: str):
         html = etree.HTML(content, etree.HTMLParser())
         elements = html.xpath('//div[contains(@class, "fr")]/ul')
         if len(elements) == 0:
@@ -33,7 +34,7 @@ class PeopleListParser(Parser):
         end = datetime.datetime(2020, 4, 11)
         items = []
         for element in elements:
-            item = self._parse_search_item(element, metadata)
+            item = self._parse_search_item(element, task.metadata)
             if item:
                 items.append(item)
                 need_next_page = True
@@ -44,7 +45,7 @@ class PeopleListParser(Parser):
 
         # Parse link for next page
         if need_next_page:
-            self._parse_next_page_request(url, html, metadata)
+            self._parse_next_page_request(task, html)
 
         for item in items:
             self.delegate.save_content(item, 'cnr')
@@ -73,7 +74,7 @@ class PeopleListParser(Parser):
 
         return item
 
-    def _parse_next_page_request(self, reference: str, html: _Element, metadata: dict):
+    def _parse_next_page_request(self, task: Task, html: _Element):
         element = html.xpath('//div[@class="show_nav_bar"]/a')
         if not element:
             return
@@ -82,9 +83,9 @@ class PeopleListParser(Parser):
         if element.text == '下一页':
             url = element.attrib['href']
 
-            comment_url = urljoin(reference, url)
-            url_components = urlparse(comment_url)
+            next_page_url = urljoin(task.url, url)
+            url_components = urlparse(next_page_url)
             path = normpath(url_components.path)
-            comment_url = urlunparse((url_components.scheme, url_components.netloc, path, url_components.params,
+            next_page_url = urlunparse((url_components.scheme, url_components.netloc, path, url_components.params,
                                       url_components.query, url_components.fragment))
-            self.delegate.append_url(comment_url, '', reference, metadata)
+            self.delegate.append_request_task(Task(next_page_url, '', task.url, metadata=task.metadata))

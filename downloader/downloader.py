@@ -2,6 +2,8 @@ import logging
 
 import requests
 
+from model.task import Task
+
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
@@ -12,17 +14,23 @@ class Downloader:
         self.session = requests.session()
         self.session.headers.update(headers)
 
-    def download_url(self, url: str, referer: str) -> str:
-        logger.info(f'Prepare to download the url {url} with the reference {referer}')
-        if referer:
-            self.session.headers['Referer'] = referer
+    def download_url(self, task: Task) -> str:
+        logger.info(f'Prepare to download the url {task.url} with the reference {task.reference}')
+        if task.reference:
+            self.session.headers['Referer'] = task.reference
         else:
             self.session.headers.pop('Referer', None)
 
-        response = self.session.get(url)
+        if task.method == 'GET':
+            response = self.session.get(task.url)
+        elif task.method == 'POST':
+            response = self.session.post(task.url, json=task.body)
+        else:
+            raise Exception(f'unsupported method {task.method}')
+
         if response.status_code != 200:
-            raise Exception(f'The status code for url {url} was {response.status_code}')
+            raise Exception(f'The status code for url {task.url} was {response.status_code}')
 
         self.session.cookies = response.cookies
-        logger.info(f'Succeed download the url {url}')
+        logger.info(f'Succeed download the url {task.url}')
         return response.text

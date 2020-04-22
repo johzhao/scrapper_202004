@@ -1,0 +1,1087 @@
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="keywords"
+			content="搜索,新闻网,中国新闻网,CNS,chinanews,中新社,中新网,视频,新闻,图片" />
+		<meta name="description" content="CNS官方搜索网站，有效查找新闻、奥运报道、图片库、华人、华文教育。" />
+		<meta name="author" content="redhacker(beanor#gmail.com)" />
+		<title>中新网搜索</title>
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		<link type="text/css" href="style/cnssearch-style.css"
+			rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="js/jquery.autocomplete.css"/>
+ <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+ <script type="text/javascript" src="js/jquery.autocomplete.js"></script>
+ <script>
+  $(document).ready(function() {
+             //解决跨域问题 ?callback=?
+             $("#q").autocomplete('test/auto.jsp?callback=?', {
+                 matchContains: true,
+                //跨域问题
+                 callback: true,
+                 minChars: 1,
+                 extraParams: {name:function(){return $('#q').val();}}, 
+                 //跨域问题
+                 dataType: "jsonp",
+                 //跨域问题
+                 jsonp: "callback",
+                 mustMatch:false,
+                 scrollHeight:300,
+                 selectFirst:false,
+                 parse: function(data) {
+                     return $.map(data, function(row) {
+                      
+                         return {
+                            data: row,
+                             value: row.name,
+                             result: row.name
+                             
+                         }
+                     });
+                 },
+                 formatItem: function(item) {
+                     return item.name;
+                }
+             }).result(function(e, item) {
+             });
+     });
+     
+ </script>			
+			
+
+		<script language="javascript">
+
+function submitFun(f) {
+  if (f == 'f1') {
+  	var q=document.sumitForm1.q.value;
+  	if(q==''){
+  		alert("请输入搜索关键字");
+  		return false;
+    }
+    if(q.indexOf("img:")!=-1){
+    	document.sumitForm1.action="imgsearch.do";
+    	q=q.replace("img:","");
+    }else if(q.indexOf("sp:")!=-1){
+    	document.sumitForm1.action="spsearch.do";
+    	q=q.replace("sp:","");
+    }
+    document.sumitForm1.q.value=q;
+	document.sumitForm1.submit();
+  } else if (f == 'f2') {
+  	var q=document.sumitForm2.q.value;
+  	if(q==''){
+  		alert("请输入搜索关键字");
+  		return false;
+    }
+    if(q.indexOf("img:")!=-1){
+    	document.sumitForm1.action="imgsearch.do";
+    	q=q.replace("img:","");
+    }else if(q.indexOf("sp:")!=-1){
+    	document.sumitForm1.action="spsearch.do";
+    	q=q.replace("sp:","");
+    }
+    document.sumitForm2.q.value=q;
+    document.sumitForm2.submit();
+  }
+}
+function queryFun(queryInfo) {
+  var qArr = queryInfo.split(":");
+  var qClass = qArr[0];
+  var qContent = qArr[1];
+  if (qClass == 'channel') {
+    document.sform.channel.value = qContent;
+  } else if (qClass == 'sort'){
+    document.sform.sort.value = qContent;
+  } else if (qClass == 'time_scope') {
+    document.sform.time_scope.value = qContent;
+  }
+  document.sform.pager.value = 0;
+  document.sform.submit();
+}
+
+
+
+function ongetkey(num){
+		document.form2.start.value=num*10;
+		document.form2.submit();
+}
+
+function onimg(){
+ if (document.sumitForm1.q.value == "") {
+   	window.location.href="imgindex.do";
+ }else{
+ 	document.imgform.q.value=document.sumitForm1.q.value;
+ 	document.imgform.submit();	
+ }
+
+}
+function onsp(){
+	 if (document.sumitForm1.q.value == "") {
+   			window.location.href="spindex.do";
+ 	 }else{
+ 	 	document.spform.q.value=document.sumitForm1.q.value;
+ 		document.spform.submit();	
+ 	}
+}
+
+
+function onweb(){
+	 if (document.sumitForm1.q.value == "") {
+   			window.location.href="index.do";
+ 	 }else{
+ 	 	document.wform.q.value=document.sumitForm1.q.value;
+ 		document.wform.submit();	
+ 	}
+}
+function onbbs(){
+	 if (document.sumitForm1.q.value == "") {
+   			window.location.href="http://sou.bbs.chinanews.com/";
+ 	 }else{
+ 	 	window.location.href="http://sou.bbs.chinanews.com/search.php?keywords="+encodeURIComponent(document.sumitForm1.q.value);
+ 	}
+}
+</script>
+			<style>
+
+.ttc {
+	text-align: left;
+	padding-left: 20px;
+}
+
+.tdiv a:link,.tdiv a:visited {
+	font-size: 14px;
+}
+
+.ttc,.ttc a:link {
+	font-size: 14px;
+	padding-bottom: 4px;
+}
+
+
+
+em {
+	color: red;
+	font-style: normal;
+}
+
+
+
+.tsdiv {
+	position: absolute;
+	top: 0px;
+	left: 110px;
+	background: transparent;
+	height: 37px;
+	width: 300px;
+	line-height: 37px;
+	text-align: center;
+}
+
+.rsimg {
+	width: 120px;
+	height: 90px;
+	border: 1px blue solid;
+	margin: 2px;
+}
+
+.shiping {
+	background-image:
+		url("http://www.chinanews.com.cn/fileftp/2009/02/2009-02-04/U76P4T47D10234F981DT20090204162127.gif")
+		;
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 18px;
+	text-align: left;
+}
+
+/*xz*/
+body{padding:0;margin:0;border:none;}
+input,select,div,ul,li,p,a{padding:0;margin:0;border:none;}
+.q{width:387px;height:34px;padding:0 5px;float:left;border-right:None;line-height:34px; font-size:14px;
+	vertical-align:baseline; background:url(images/list_input.jpg) no-repeat;color:#737373;}
+.submitBtn {
+	float:left;
+	height:34px;
+	line-height:34px; 
+	width:100px;
+	
+	background:url(images/list_ss.jpg) no-repeat;
+	margin-left:0px;
+	cursor:pointer;
+}
+
+.search_list_top{clear: right;padding:16px 0 16px 23px;}
+.clear{clear:both;}
+.mt10{margin-top:10px;height:34px;}
+
+#search_rs_info{
+	clear:both; 
+	height:37px; 
+	line-height:37px; 
+	background-color:#f5f5f5; 
+	border-top:none;
+	margin-bottom:10px;
+}
+
+#copyright{
+	clear:both; 
+	height:30px; 
+	line-height:30px; padding:8px 0;
+	text-align:center; color:#b1b1b1;
+}
+#copyright a{color:#b1b1b1;  text-decoration:underline;}
+
+#bottom_serach_bar{
+	clear:both; 
+	margin-top:20px;
+	border:#eaeaea 1px solid; 
+	background:#fff;
+	text-align:center;
+	height:66px;
+	line-height:50%;
+}
+#bottom_serach_bar table{
+	margin-top:15px;
+	margin-bottom:10px;
+}
+
+#page_bar{
+	clear:both; 
+	font-size:14px;
+	text-align:left;
+	margin-left:13px;
+}
+#page_bar a:link{
+	color: #006699;
+	text-decoration: underline;
+}
+#page_bar a:visited{
+	color: #006699;
+	text-decoration: underline;
+}
+#page_bar a:hover{
+	color: #006699;
+	text-decoration: none;
+}
+
+#pagediv {
+	font-size: 12px;
+	font-family: "宋体", sans-serif;
+	text-align: left;
+}
+
+#pagediv a {
+	margin-right: 10px;
+	text-align: center;
+	border: 1px #e6e6e6 solid;
+	padding: 9px 14px;
+	height: 34px;
+	line-height: 34px;
+}
+
+#pagediv .thispage {
+	
+	
+	line-height: 34px;
+	color: #808080;
+	background: #eeeeee;
+	padding: 9px 14px;
+	margin-left: 0px;
+	margin-right: 10px;
+	height:34px;
+	border:#e6e6e6 1px solid;
+}
+
+#pagediv .diabledpage {
+	padding: 9px 14px;
+	height: 34px;
+	line-height: 34px;
+	color: #808080;
+	background: #eeeeee;
+	
+	margin-left: 0px;
+	margin-right: 10px;
+	border:#e6e6e6 1px solid;
+}
+
+
+
+#pagediv a:visited {
+	color: #808080;
+	text-decoration: none;
+	border: 1px #e6e6e6 solid;
+}
+
+#pagediv a:hover {
+	color: #808080;
+	text-decoration: node;
+	border: 1px #e6e6e6 solid;
+}
+
+#pagediv a:link {
+	color: #808080;
+	text-decoration: node;
+	border: 1px #e6e6e6 solid;
+}
+
+.helptext img{ vertical-align:middle;}
+</style>
+	</head>
+	<body onload="document.sumitForm1.q.focus();">
+		<!--search bar start-->
+<div class="search_list_top">
+			<form name="sumitForm1" method="post" action="search.do"
+				onsubmit="return submitFun()" style="margin: 0; padding: 0;">
+				<table width="100%" border="0" align="left" cellpadding="0"
+					cellspacing="0">
+					<tr>
+						<td width="8%" ><a href="search.do"><img src="images/list_logo.jpg"
+									alt="中新搜索" border="0" style="margin-right: 5px;padding-left:12px;" /></a></td>
+						<td width="" valign="middle" class="ttc" style="padding-left: 20px;">
+							<b>新闻</b> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="javascript:void();" onclick="onimg();return false;">图片</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="javascript:void();" onclick="onsp();return false;">视频</a>
+							
+						</td>
+                        <td width="72%"></td>
+					</tr>
+					<tr>
+                       <td colspan="3">
+                       <div style="height:34px;" class="mt10" >
+                       <div style="float:left;width:515px;">
+                         <input type="text" name="q" id="q" class="q" autocomplete="off"
+								value='疫情'  maxlength="40" />
+                         <input type="button" name="submitBtn" class="submitBtn"
+								value="  " onclick="return submitFun('f1')" />  
+                                <div class="clear"></div>
+                                </div> 	
+					     <div style="float:Left;width:300px;font-size:14px;padding-top:8px;"  class="helptext">
+                       	   <img src="http://sou.chinanews.com/images/hand.gif"/>
+                            <a href="advSearch.do">
+                            <span style="color:blue;">进入高级搜索
+                            </span>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="help.jsp" target="_blank">使用帮助</a>
+                         </div>
+                         
+                         </div>
+					    </td>
+					</tr>
+				</table>
+	</form>
+<div class="clear"></div>
+		</div>
+
+		<!--search bar end-->
+		<!-- search result info start -->
+		<div id="search_rs_info">
+			<div
+				style="float: left; width: 400px; margin-left: 23px; position: relative;">
+				
+					
+					
+      以下是为您找到的网页
+      
+							<div class="tsdiv">
+								(没有快速找到内容？可以尝试“
+								<a href="javascript:queryFun('sort:_score')"
+									style='color: #9D0000;'>按相关度</a>”搜索)
+							</div>
+						
+						
+					
+				
+			</div>
+			<div
+				style="float: right; width: 500px; text-align: right; margin-right: 5px;color:#8d8d8d;">
+				当前显示
+				
+					
+					
+					1-10
+				
+				条，共为您找到约
+				<span style="color: red">98,151</span>篇相关的网页。
+			</div>
+		</div>
+
+
+		<table style="width: 95%; text-align: left; vertical-align: top;">
+			<tr>
+				<td width="69%" style="vertical-align: top">
+					<!-- search filter condition end -->
+					<!--news list start-->
+					<div id="news_list">
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/fortune/2020/04-22/9164053.shtml" target="_blank">经济日报：扩大有效投资大有可为</a>
+										</li>
+										<li class="news_content">度，全国固定资产投资84145亿元，同比下降16.1%。突如其来的新冠肺炎<em>疫</em><em>情</em>对我国经济社会发展带来前所未有的冲击，投资活动也不可避免受到影响，但我国经济发展韧性强、潜力足、空间...</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/fortune/2020/04-22/9164053.shtml&nbsp;&nbsp;
+											2020-04-22 09:01:19
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/gj/2020/04-22/9164031.shtml" target="_blank">全球新冠确诊超256万例 特朗普拟暂停移民入美60天</a>
+										</li>
+										<li class="news_content">法两国死亡病例持续上升；非洲<em>疫</em><em>情</em>形势依然严峻，拉美多国拟逐步复工复产。当地时间4月21日，美国华盛顿，美国最大的护士工会部分...</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/gj/2020/04-22/9164031.shtml&nbsp;&nbsp;
+											2020-04-22 09:00:55
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/gn/2020/04-22/9164048.shtml" target="_blank">推动民生保障制度更加成熟更加定型</a>
+										</li>
+										<li class="news_content">会救助、环保、社会治理等诸多方面不断增强人民的获得感、幸福感、安全感。　　坚持和完善统筹城乡的民生保障制度的原则和路径　　在这次抗击新冠肺炎<em>疫</em><em>情</em>中，我国统筹城乡的民</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/gn/2020/04-22/9164048.shtml&nbsp;&nbsp;
+											2020-04-22 08:58:56
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/cj/2020/04-22/9164046.shtml" target="_blank">商家降成本 买家得实惠 线上“拼单” 购销两旺</a>
+										</li>
+										<li class="news_content">近再‘团’一次？”家住上海浦东新区尚海郦景小区的陈耕每次打开小区的微信群，都会看到邻居们发来的团购建议。　　<em>疫</em><em>情</em>期间，小区居民们最期待的就是社区线上团购活动。不用外出去逛超市、不用额外下载APP，坐在家里就能收到...</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/cj/2020/04-22/9164046.shtml&nbsp;&nbsp;
+											2020-04-22 08:58:13
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/gn/2020/04-22/9164045.shtml" target="_blank">黑龙江：全力防输入防反弹防输出</a>
+										</li>
+										<li class="news_content">　　省政府新闻办举行<em>疫</em><em>情</em>防控第四十七场新闻发布会　　“两条战线、两个战场”全力防输入防反弹防输出　　本报21日讯(记...</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/gn/2020/04-22/9164045.shtml&nbsp;&nbsp;
+											2020-04-22 08:57:46
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/gn/2020/04-22/9164044.shtml" target="_blank">传播平台勿当不良信息“搬运工”</a>
+										</li>
+										<li class="news_content">新乐　　从“华商很难”到“多国渴望回归中国”，近日，多个“营销号”发布涉嫌夸大误导的文章引起了人们的关注。这些捕风捉影的自媒体文章，利用<em>疫</em><em>情</em>下人们对外界信息的渴求，以充斥着虚伪狭隘的民族主义情绪实现“吸粉”，以此获得巨大流量</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/gn/2020/04-22/9164044.shtml&nbsp;&nbsp;
+											2020-04-22 08:56:40
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/gn/2020/04-22/9164042.shtml" target="_blank">人社部：有信心、有能力保持就业局势总体稳定</a>
+										</li>
+										<li class="news_content">。　　四是优服务。这次<em>疫</em><em>情</em>对线下服务带来了很大的制约，同时也倒逼线上服务的发展。我们先后推出了线上春风行动、线上就业援助活动，...</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/gn/2020/04-22/9164042.shtml&nbsp;&nbsp;
+											2020-04-22 08:56:22
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/cj/2020/04-22/9164041.shtml" target="_blank">畅通经济循环 稳住企业订单</a>
+										</li>
+										<li class="news_content">售额，“这可是往常一个门店20天的销售额，直播卖货帮大忙了！”　　原来，为了给受<em>疫</em><em>情</em>影响的企业纾困，漳州市商务局联合市委网信办，近期举办了一场网络直播营销活动。不仅是东山海产，松软的华...</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/cj/2020/04-22/9164041.shtml&nbsp;&nbsp;
+											2020-04-22 08:53:54
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/gj/2020/04-22/9164036.shtml" target="_blank">患难见真情 共同抗<em>疫</em><em>情</em></a>
+										</li>
+										<li class="news_content">　　患难见真情 共同抗<em>疫</em><em>情</em>　　新冠肺炎<em>疫</em><em>情</em>给全球公共卫生安全带来巨大挑战。中国驻外使领馆为...</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/gj/2020/04-22/9164036.shtml&nbsp;&nbsp;
+											2020-04-22 08:51:20
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									
+								</td>
+								<td style="padding-left: 10px;" valign="top">
+									<ul class="news_item">
+										<li class="news_title">
+											<a href="http://www.chinanews.com/gn/2020/04-22/9164040.shtml" target="_blank">黑龙江省长：统筹<em>疫</em><em>情</em>防控与经济发展 用六个推进落实六保要求</a>
+										</li>
+										<li class="news_content">　　王文涛主持召开省政府常务会议分析一季度经济形势部署当前经济工作　　统筹<em>疫</em><em>情</em>防控与经济发展 用六个推进落实六保要求　　本报21日讯(记者王坤)21日下午，省委副书记、省长王...</li>
+										<li class="news_space"></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="news_item">
+										<li class="news_other">http://www.chinanews.com/gn/2020/04-22/9164040.shtml&nbsp;&nbsp;
+											2020-04-22 08:51:11
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<br />
+						
+					</div>
+					<!--news list end-->
+					<!--page start-->
+					<div id="page_bar">
+						<div id='pagediv'><span class='diabledpage'>首页</span><span class='diabledpage'>上一页</span><span class='thispage'>1</span><a href='javascript:ongetkey(1)'>2</a><a href='javascript:ongetkey(2)'>3</a><a href='javascript:ongetkey(3)'>4</a><a href='javascript:ongetkey(4)'>5</a><a href='javascript:ongetkey(5)'>6</a><a href='javascript:ongetkey(6)'>7</a><a href='javascript:ongetkey(7)'>8</a><a href='javascript:ongetkey(8)'>9</a><a href='javascript:ongetkey(1)'>下一页</a><a href='javascript:ongetkey(9815)'>尾页</a></div>
+
+					</div>
+				</td>
+				<td width="380" style="vertical-align: top;">
+					<!-- search result info end -->
+					<!-- search filter condition start -->
+					<table style="vertical-align: top" width="380" cellspacing="0"
+						cellpadding="0" align="left" bgcolor="#ffffff" border="0">
+						<tr>
+							<td>
+								&nbsp;&nbsp;
+							</td>
+							<td width=1 bgcolor=#c9d7f1>
+								<img width=1 height=1 alt="" />
+							</td>
+							<td>
+								&nbsp;&nbsp;
+							</td>
+							<td>
+								<div style="line-height: 25px;">
+									<p>
+										<span style="color: #666666"><b>排序方式</b>
+										</span>
+										<font size=-1><br /> 
+												
+                ·发表时间
+                ·<a href="javascript:queryFun('sort:_score')">相关度</a>
+												
+												
+											 </font>
+									</p>
+									<p>
+										<span style="color: #666666;"><b>按时间筛选结果</b>
+										</span>
+										<font size=-1><br /> 
+												
+												
+												
+												
+												
+												
+												
+			    ·<a href="javascript:queryFun('time_scope:1')">一天内</a>
+			   ·<a href="javascript:queryFun('time_scope:2')">两天内</a>
+                ·<a href="javascript:queryFun('time_scope:7')">一周内</a>
+                ·<a href="javascript:queryFun('time_scope:30')">一月内</a>
+                ·<a href="javascript:queryFun('time_scope:90')">三月内</a>
+                ·<a href="javascript:queryFun('time_scope:365')">过去一年</a>
+                ·全部
+			  
+											 </font>
+									</p>
+									<p>
+										<span style="color: #666666"><b>按频道筛选结果</b>
+										</span>
+										<font size=-1><br /> 
+												
+													
+			      ·全部
+														<br />
+													
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:gj')">国际频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:gn')">国内新闻</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:cj')">财经频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:fortune')">金融频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:stock')">证券频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:ga')">港澳频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:tw')">台湾频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:hr')">华人频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:sh')">社会新闻</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:df')">地方频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:fz')">法治频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:ty')">体育频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:yl')">娱乐频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:tp')">图片频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:sp')">视频频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:cul')">文化频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:hb')">华文报摘</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:edu')">教育频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:jk')">健康频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:auto')">汽车频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:ny')">能源频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:estate')">房产频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:life')">生活频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:it')">IT频道</a>
+														<br />
+													
+												
+											
+												
+													
+													
+			      ·<a href="javascript:queryFun('channel:wine')">葡萄酒频道</a>
+														<br />
+													
+												
+											 </font>
+									</p>
+									<p>
+										<span style="color: #666666"><b>更多搜索</b>
+										</span>
+										<font size="-1"><br /> ·<a
+											href="http://www.google.cn/search?hl=zh-CN&q=疫情&meta=&aq=f&oq="
+											target=_blank>Google</a>
+										<br /> ·<a
+											href="http://www.baidu.com/s?ie=utf-8&bs=%E4%B8+%9B%BD&sr=&z=&cl=3&f=8&wd=疫情&ct=0"
+											target=_blank>Baidu</a>
+										<br /> ·<a
+											href="http://one.cn.yahoo.com/s?p=疫情&pid=hp&v=web"
+											target=_blank>Yahoo</a> </font>
+									</p>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+		<!--page end-->
+		<!--search bar start-->
+		<div id="bottom_serach_bar">
+			<form name="sumitForm2" method="post" action="search.do"
+				onsubmit="return submitFun()">
+				<table width="100%" border="0" align="left" cellpadding="0"
+					cellspacing="0">
+					<tr>
+						<td align="right" valign="middle">
+                        <div  style="padding-left:23px;float:left;width:515px;">
+                         <input type="text" name="q" id="q" class="q" autocomplete="off"
+								value='疫情'  maxlength="40" />
+                         <input type="button" name="submitBtn" class="submitBtn"
+								value="  " onclick="return submitFun('f1')" />  
+                                <div class="clear"></div>
+                                </div>
+							<div  style="float:left;width:300px;padding-top:8px; text-align:left;font-size:14px;">
+                          	<img src="http://sou.chinanews.com/images/hand.gif"/>
+    	<a href="advSearch.do">
+    	<span style="color:blue;">进入高级搜索
+    	</span>
+    	</a>
+    	&nbsp;&nbsp;&nbsp;&nbsp;
+    	<a href="help.jsp" target="_blank">使用帮助</a>
+                          </div>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<!--search bar end-->
+		<!--copyright start-->
+		<div id="copyright">
+			&copy;2008 CHINANEWS.COM.CN
+			<a href="http://www.miibeian.gov.cn/" target="_blank">[京ICP证040655号]</a>
+			<a href="http://www.chinanews.com/news/xuke.html" target="_blank">网上传播视听节目许可证(0106168)</a>
+			版权所有
+		</div>
+		<!--copyright end-->
+		<form name="sform" method="post" action="search.do">
+			<input type="hidden" name="q" value='疫情' />
+			<input type="hidden" name="ps" value="10" />
+			<input type="hidden" name="time_scope" value="0" />
+			<input type="hidden" name="channel" value="all" />
+			<input type="hidden" name="sort" value="pubtime" />
+			<input type="hidden" name="adv" value="1" />
+			<input type="hidden" name="day1" value="" />
+			<input type="hidden" name="day2" value="" />
+			<input type="hidden" name="field" value="" />
+			<input type="hidden" name="direction" value="" />
+			<input type="hidden" name="pager" value="" />
+		</form>
+
+		<form name="form2" method="post">
+			<input type="hidden" name="q" value="疫情" />
+			<input type="hidden" name="ps" value="10" />
+			<input type="hidden" name="start" value="0" />
+			<input type="hidden" name="type" value="" />
+			<input type="hidden" name="sort" value="pubtime" />
+			<input type="hidden" name="time_scope" value="0" />
+			<input type="hidden" name="channel" value="all" />
+			<input type="hidden" name="adv" value="1" />
+			<input type="hidden" name="day1" value="" />
+			<input type="hidden" name="day2" value="" />
+			<input type="hidden" name="field" value="" />
+			<input type="hidden" name="creator" value="" />
+		</form>
+
+		<form action="imgsearch.do" name="imgform" method="post">
+			<input type="hidden" value="" name="q" />
+		</form>
+		<form action="spsearch.do" name="spform" method="post">
+			<input type="hidden" value="" name="q" />
+		</form>
+		<form action="search.do" name="wform" method="post">
+			<input type="hidden" value="" name="q" />
+		</form>
+	</body>
+</html>

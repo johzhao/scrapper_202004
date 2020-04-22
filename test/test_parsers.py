@@ -2,6 +2,7 @@ import logging
 
 from mongoengine import Document
 
+from model.task import Task
 from parser.dianping.comment_parser import CommentParser
 from parser.dianping.detail_parser import DetailParser
 from parser.dianping.list_parser import ListParser
@@ -17,11 +18,13 @@ class MockParserDelegate:
 
     def save_content(self, content: Document, type_: str):
         logger.info(f'Save type {type_}, content {content}')
-        pass
 
-    def append_url(self, url: str, type_: str, reference: str, metadata: dict = None):
-        logger.info(f'Append url {url}, type {type_}, reference {reference}')
-        pass
+    # def append_url(self, url: str, type_: str, reference: str, metadata: dict):
+    #     logger.info(f'Append url {url}, type {type_}, reference {reference}, metadata {metadata}')
+
+    def append_request_task(self, task: Task):
+        logger.info((f'Append task with url {task.url}, type {task.type_}, reference {task.reference},'
+                     f' method {task.metadata}, body {task.body}, metadata {task.metadata}'))
 
 
 def test_list_parser():
@@ -61,14 +64,23 @@ def test_cnr_search_list_parser():
     url = 'http://was.cnr.cn/'
     data = _load_html_file('./test_files/cnr_list.html')
     parser = get_parser(url, MockParserDelegate())
-    parser.parse(url, data)
+    parser.parse(url, data, {})
 
 
 def test_people_search_list_parser():
     url = 'http://search.people.com.cn/cnpeople/news/getNewsResult.jsp'
+    task = Task(url, '', '')
     data = _load_html_file('./test_files/people_list.html', 'gbk')
     parser = get_parser(url, MockParserDelegate())
-    parser.parse(url, data)
+    parser.parse(task, data)
+
+
+def test_china_news_search_list_parser():
+    url = 'http://sou.chinanews.com/search.do'
+    task = Task(url, '', '', method='POST')
+    data = _load_html_file('./test_files/china_news_list.html')
+    parser = get_parser(url, MockParserDelegate())
+    parser.parse(task, data)
 
 
 def _load_html_file(filepath: str, encodeing='utf-8'):

@@ -26,8 +26,8 @@ class Scheduler(threading.Thread):
     def save_content(self, content: Document, type_: str):
         self.storage.save_content(content, type_)
 
-    def append_url(self, url: str, type_: str, reference: str, metadata=None):
-        self.task_queue.push_task(Task(url, type_, reference, metadata))
+    def append_request_task(self, task: Task):
+        self.task_queue.push_task(task)
 
     def run(self) -> None:
         while True:
@@ -43,10 +43,10 @@ class Scheduler(threading.Thread):
             if task is None:
                 break
 
-            content = self.downloader.download_url(task.url, task.reference)
+            content = self.downloader.download_url(task)
             try:
                 parser = get_parser(task.url, self)
-                parser.parse(task.url, content, task.metadata)
+                parser.parse(task, content)
             except Exception as e:
                 with open('exception.html', 'w') as ofile:
                     ofile.write(content)

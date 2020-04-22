@@ -6,6 +6,7 @@ from mongoengine import connect
 import config
 from export.export import export_task_3
 from model.sina_topic import SinaTopic
+from model.task import Task
 
 log_format = ' %(asctime)s - %(levelname)s - %(filename)s - %(lineno)s - %(message)s'
 logging.basicConfig(level=logging.INFO, format=log_format)
@@ -66,18 +67,41 @@ def add_cnr_search_task(scheduler: Scheduler):
     for keyword in KEYWORDS:
         search_key = urllib.parse.quote(keyword)
         url = f'http://was.cnr.cn/was5/web/search?page=2&channelid=234439&searchword={search_key}&keyword={search_key}&orderby=LIFO&was_custom_expr=%28{search_key}%29&perpage=10&outlinepage=1&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude='
-        scheduler.append_url(url, '', '', {
+        scheduler.append_request_task(Task(url, '', '', metadata={
             'keyword': keyword
-        })
+        }))
 
 
 def add_people_search_tasks(scheduler: Scheduler):
     for keyword in KEYWORDS:
         search_key = urllib.parse.quote(keyword, encoding='gbk')
         url = f'http://search.people.com.cn/cnpeople/search.do?pageNum=2&keyword={search_key}&siteName=news&facetFlag=true&nodeType=belongsId&nodeId=0'
-        scheduler.append_url(url, '', '', {
+        body = {
+            'keyword': search_key,
+            'pageNum': 1,
+            'siteName': 'news',
+            'facetFlag': True,
+            'nodeType': 'belongsId',
+            'nodeId': 0,
+            'pageCode': '',
+            'originName': '',
+        }
+        scheduler.append_request_task(Task(url, '', '', method='POST', body=body, metadata={
             'keyword': keyword
-        })
+        }))
+
+
+def add_china_news_tasks(scheduler: Scheduler):
+    for keyword in KEYWORDS:
+        search_key = urllib.parse.quote(keyword)
+        url = f'http://sou.chinanews.com/search.do'
+        body = {
+            'q': search_key,
+        }
+        metadata = {
+            'keyword': keyword,
+        }
+        scheduler.append_request_task(Task(url, '', '', method='POST', body=body, metadata=metadata))
 
 
 def export():
@@ -94,6 +118,7 @@ def main():
     # add_weibo_hot_search_tasks(scheduler)
     # add_cnr_search_task(scheduler)
     # add_people_search_tasks(scheduler)
+    # add_china_news_tasks(scheduler)
 
     scheduler.start()
     scheduler.join()
