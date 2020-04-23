@@ -1,4 +1,5 @@
 import logging
+from urllib.parse import urlparse
 
 import requests
 
@@ -17,6 +18,10 @@ class Downloader:
     def download_url(self, task: Task) -> str:
         logger.info((f'Prepare to download the url {task.url} with the reference {task.reference}, '
                      f'params {task.params}'))
+
+        url_components = urlparse(task.url)
+        self.session.headers['host'] = url_components.hostname
+
         if task.reference:
             self.session.headers['Referer'] = task.reference
         else:

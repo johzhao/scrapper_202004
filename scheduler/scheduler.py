@@ -22,12 +22,15 @@ class Scheduler(threading.Thread):
         self.downloader = Downloader(config.HEADERS)
         self.storage = Storage(config.MONGO_DATABASE, config.MONGO_HOST, config.MONGO_PORT)
         self.task_queue = TaskQueue(config.REDIS_DB_URL, config.REDIS_DB_DATABASE)
+        self.count = 0
 
     def save_content(self, content: Document, type_: str):
         self.storage.save_content(content, type_)
 
     def append_request_task(self, task: Task):
-        self.task_queue.push_task(task)
+        if self.count <= 5:
+            self.task_queue.push_task(task)
+            self.count += 1
 
     def run(self) -> None:
         while True:

@@ -11,7 +11,7 @@ from lxml import etree
 # noinspection PyProtectedMember
 from lxml.etree import _Element
 
-from model.gov_item import GovItem
+from model.china_cdc_item import ChinaCdcItem
 from model.task import Task
 from parser.parser import Parser
 from parser.utility import get_element_str
@@ -20,24 +20,28 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-class GovListParser(Parser):
-    publish_time_pattern = re.compile(r'(.*?)：(\d+).(\d+).(\d+)')
+class ChinaCdcListParser(Parser):
+    publish_time_pattern = re.compile(r'(.*?)：(\d+)-(\d+)-(\d+)')
 
     def __init__(self, delegate):
         super().__init__(delegate)
 
     def parse(self, task: Task, content: str):
         html = etree.HTML(content, etree.HTMLParser())
-        elements = html.xpath('//li[@class="res-list"]')
-        if len(elements) == 0:
+        titles = html.xpath('//div[@class="searchResult-con_news"]/p[@class="search-title-text"]/a')
+        contents = html.xpath('//div[@class="searchResult-con_news"]/p[@class="search-con-text"]')
+        publishs = html.xpath('//div[@class="searchResult-con_news"]/span[@class="search-contxt-time"]')
+
+        if len(titles) == 0 or len(titles) != len(contents) or len(titles) != len(publishs):
             raise Exception(f'Failed to parse item from {content}')
 
         need_next_page = False
         begin = datetime.datetime(2020, 1, 10)
         end = datetime.datetime(2020, 4, 11)
         items = []
-        for element in elements:
-            item = self._parse_search_item(element, task.metadata)
+        count = len(titles)
+        for index in range(count):
+            item = self._parse_search_item(titles[index], contents[index], publishs[index], task.metadata)
             if item:
                 items.append(item)
                 if item.publish >= begin:
@@ -50,27 +54,16 @@ class GovListParser(Parser):
         for item in items:
             self.delegate.save_content(item, 'cnr')
 
-    def _parse_search_item(self, html: _Element, metadata: dict) -> Optional[GovItem]:
-        elements = html.xpath('h3/a')
-        if not elements:
-            raise Exception(f'Failed to parse item')
-
-        element = elements[0]
-        title = get_element_str(element)
-        url = element.attrib['href']
+    def _parse_search_item(self, html1: _Element, html2: _Element, html3: _Element, metadata: dict) -> Optional[ChinaCdcItem]:
+        title = get_element_str(html1)
+        url = html1.attrib['href']
         if not title:
             print('')
 
-        # abstract_elements = html.xpath('p[@class="res-sub"]')
-        # if not abstract_elements:
-        #     return None
-        #
-        # abstract = get_element_str(abstract_elements[0])
+        abstract = get_element_str(html2)
 
         try:
-            element = html.xpath('.//p[@class="res-other"]/span')
-            element = element[0]
-            publish_str = element.text.strip()
+            publish_str = html3.text.strip()
             matches = self.publish_time_pattern.findall(publish_str)
             if not matches:
                 raise Exception(f'Failed to parse publish datetime from {publish_str}')
@@ -78,26 +71,23 @@ class GovListParser(Parser):
         except:
             return None
 
-        item = GovItem()
+        item = ChinaCdcItem()
         item.title = title
         item.url = url
         item.keyword = metadata.get('keyword', '')
-        item.abstract = ''
+        item.abstract = abstract
         item.publish = publish
 
         return item
 
     def _parse_next_page_request(self, task: Task, html: _Element):
-        element = html.xpath('//a[@id="snext"]')
+        element = html.xpath('//a[@class="next-page"]')
         if not element:
             return
 
         element = element[0]
         url = element.attrib['href']
+        if not url.startswith('http'):
+            url = urljoin(task.url, url)
 
-        # next_page_url = urljoin(task.url, url)
-        # url_components = urlparse(next_page_url)
-        # path = normpath(url_components.path)
-        # next_page_url = urlunparse((url_components.scheme, url_components.netloc, path, url_components.params,
-        #                           url_components.query, url_components.fragment))
         self.delegate.append_request_task(Task(url, '', task.url, metadata=task.metadata))
