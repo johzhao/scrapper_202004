@@ -1,0 +1,541 @@
+
+
+                                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" />
+<html xmlns="http://www.w3.org/1999/xhtml">
+   
+	    <script type="text/javascript">
+        function goto(channelid)
+        {   alert("goto");
+            if (document.searchform.searchword.value.trim()==''){
+                if(channelid=='233877'){
+                    window.location.href='/was5/web/search?channelid='+channelid;
+                }
+                else{
+                    window.location.href='index.jsp?channelid='+channelid;
+                }
+            }
+          
+        }
+        String.prototype.trim = function () {
+            return this.replace(/^\s*/, "").replace(/\s*$/, "");
+        }
+        function checkInput()
+        {	 
+            if (document.searchform.searchword.value.trim()==''){
+                document.searchform.searchword.focus();
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+    </script>
+    <script language="javascript">
+        function setAdvancedWords()
+        {
+		 alert("setAdvancedWords");
+            document.searchform.andsen.value = '疫情';
+            document.searchform.total.value = '';
+            document.searchform.orsen.value = '';
+            document.searchform.exclude.value = '';
+        }
+        function setSearchScope(type) {
+   
+            document.searchform.searchscope.value = type;
+            document.searchform.submit();
+        }
+
+        function setTimeScope(type,column) {
+  
+            document.searchform.timescope.value = type;
+            document.searchform.timescopecolumn.value = column;
+            document.searchform.submit();
+        }
+        function setOrderBy(type) {
+
+            document.searchform.orderby.value = type;
+            document.searchform.submit();
+        }
+    </script>
+	<script type="text/javascript">
+    String.prototype.trim = function () {
+        return this.replace(/^\s*/, "").replace(/\s*$/, "");
+    };
+    function checkInput()
+    {
+        if (document.searchform.searchword.value.trim()==''){
+            document.searchform.searchword.focus();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+   	function Search(){
+	
+	var searchword ="";
+	var search = document.searchform.searchword.value;
+	//alert("Search"-------"search====="+search);
+	if (search.trim()==''){
+            document.searchform.searchword.focus();
+            alert("检索词不能为空");
+            return false;
+     }
+	   searchword ="'"+search+"'";
+	alert("000000000000000000000000------------------"+searchword);
+	document.searchform.searchword.value = searchword;
+	document.searchform.submit();
+	}
+
+
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>中国疾病预防控制中心</title>
+    <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/style-jearch.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/jSearch.css">
+	
+	<script type="text/javascript">
+
+
+
+
+
+
+function setSearchTab(name,num,n){
+	var searchword = document.searchform.searchword.value;
+	//alert("--------------searchword----------"+searchword);
+	searchword = searchword.replace(/\&#39;/g,"").replace(/\&/g,"%26");
+	var url = '';
+	if(num == 1){
+
+		url = '/was5/web/search?channelid=233877&searchword='+searchword;
+	}else if(num == 2){
+		url = '/was5/web/search?channelid=214876&searchword='+searchword;
+	}else if(num == 3){
+		url = '/was5/web/search?channelid=247517&searchword='+searchword;
+	}else if(num == 4){
+		url = '/was5/web/search?channelid=243142&searchword='+searchword;
+	}else if(num == 5){
+		url = '/was5/web/search?channelid=254386&searchword='+searchword;
+	}
+	location.href = url;
+	document.searchform.searchword.value = searchword;
+	//统计代码
+	_vaq.push(['trackSiteSearch', searchword.replace(/\'/g,''), '', '']);
+	
+	var aryChnlId = [233877,214876,247517,243142,287408];
+	for(i=0;i<=n;i++){
+		var menu = document.getElementById(name+i);
+		//var con=document.getElementById(name+"_"+"con"+i);
+		if(i==num)
+		{
+			if(menu.className == "")
+			{
+				menu.className="now";
+				$("#channelid").val(aryChnlId[num]);
+			}
+			else
+			{
+				menu.className="";
+				$("#channelid").val(233877);
+			}
+		}
+		else
+		{
+			menu.className=i==num?"now":"";
+			//menu.className = " ";
+		}
+  		//con.style.display=i==num?"block":"none"; 
+	}
+}
+
+
+
+function setTab(name,num,n){
+	for(i=1;i<=n;i++){
+		var menu=document.getElementById(name+i);
+		var con=document.getElementById(name+"_"+"con"+i);
+		menu.className=i==num?"now":"";
+  		con.style.display=i==num?"block":"none"; 
+	}
+}
+
+   </script>
+   <style type="text/css"></style>
+</head>
+
+<body>
+        <div class="header clearfix">
+                <div class="logo">
+                    <div class="logo-img">
+                        <img src="./images/jlogo.png " alt="logo" title="logo" srcset="">
+                    </div>
+                    <div class="top-search">
+                        <div class="icon-list">
+                            <a href="">
+                                <img src="./images/dh1.png" alt="">
+                            </a>
+                            <a href="">
+                                <img src="./images/dh2.png" alt="">
+                            </a>
+                            <a href="">
+                                <img src="./images/dh3.png" alt="">
+                            </a>
+                            <a href="">
+                                <img src="./images/dh4.png" alt="">
+                            </a>
+                            <a href="">
+                                <img src="./images/dh5.png" alt="">
+                            </a>
+                            <a href="">繁体</a>|
+                            <a href="">En</a>
+                        </div>
+                        <!-- <div class="search">
+                            <input type="text" class="searchInputs">
+                            <button type="button" class=" searchBtn">
+                                <img src="./img/indexImg/searchBtn.png">
+                            </button>
+                        </div> -->
+                    </div>
+                </div>
+                 <div class="menu">
+                    <div class="menu-items">
+                        <a href="http://www.chinacdc.cn/" class="item">首页</a>
+                        <a href="http://www.chinacdc.cn/jgxx/zxjj/" class="item">机构信息</a>
+                        <a href="http://www.chinacdc.cn/jkzt/" class="item">健康主题</a>
+                        <a href="http://www.chinacdc.cn/kjxm/zxkyjz/" class="item">科学研究</a>
+                        <a href="http://edu.chinacdc.cn/" class="item">教育培训</a>
+                        <a href="http://www.chinacdc.cn/zxdjgz/jcxt/" class="item">党群工作</a>
+                    </div>
+                </div> 
+            </div>
+    <div class="width-page jsa-container">
+      <!-- 输入搜索区域开始-->
+		
+       <div class="search">
+		   <form name="searchform" action="search" method="get" style="margin-bottom:15px;"  onsubmit="return checkInput();">
+				<input type="text" id="searchword" name="searchword" class="searchInputs"  value='疫情'/>
+				<!--<button type="submit" name="btn_search"  style="width:88px;">搜索</button>-->
+				 <button type="submit" class=" searchBtn"><i class="iconfont icon-sousuo"></i></button>
+				<input type="hidden" name="channelid" value='233877'>
+				<input type="hidden" name="timescope" value="">
+				<input type="hidden" name="timescopecolumn" value="">
+			   <input type="hidden" name="orderby" value="-日期">
+				<input type="hidden" name="perpage" value="10">
+				<input type="hidden" name="searchscope" value="">
+				
+		   </form>	
+<script>
+document.getElementById("searchword").value = document.getElementById("searchword").value.replace(/\'/g,"");
+</script>		   
+		
+           <!-- <input type="text" class="searchInputs">
+            <button type="button" class=" searchBtn">
+               
+                <i class="iconfont icon-sousuo"></i>
+            </button>-->
+        </div>
+ 
+     	
+		<div class="search-result_num">为您找到相关结果
+             <span class="searchResult-getTotalNum">
+                 4484
+             </span> 条，用时0.014秒
+        </div>
+        
+		<!-- 输入搜索框区域结束 -->
+		<!-- 搜索内容区域开始 -->
+        <div class="searchResult-con_out">
+        	<div class="searchResult-tabbar_out" id="menu">
+        		<span id="ser-con-all" class="mg-l_32 inline-block" ><a  id="one1" onclick="setSearchTab('one',1,5)">全部</a></span>
+        		<span id="ser-con-news" class="mg-l_32 inline-block"><a  id="one2" onclick="setSearchTab('one',2,5)">新闻动态</a></span>
+        		<span id="ser-con-notifi" class="mg-l_32 inline-block"><a  id="one3" onclick="setSearchTab('one',3,5)">通知公告</a></span>
+        		<span id="ser-con-health" class="mg-l_32 inline-block"><a  id="one4" onclick="setSearchTab('one',4,5)">健康主题</a></span>
+        		<span id="ser-con-webq" class="mg-l_32 inline-block"><a  id="one5" onclick="setSearchTab('one',5,5)">网站群</a></span>
+
+			</div>
+        	<div id="sear-con" class="searchResult-con_left">
+
+        		<!-- 新闻动态 -->
+        		<div class="searchResult-con_news">
+				  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/tzgg/202004/t20200421_216322.html'  target="_blank">中国疾控中心北区公寓基础设施设备更新项目监理采购项目询价公告</a></p>
+        			<p class="search-con-text">报送询价响应文件时间
+2020年4月21 日 至2020 年 4月27日 9:00
+报送地点和方式
+北京市昌平区昌百路155号主楼 133室，因处于<font color=#FF0000>疫情</font>防控期间，请以快递方式邮寄送达
+开标时间
+2020 年 4月27日 10:30
+联系人及联系方式：
+项目联系人
+陈老师
+项目联系......</p>
+                    <span class="search-contxt-time">时间：2020-04-21</span>
+        		   
+                  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/tzgg/xj/202004/t20200421_216322.html'  target="_blank">中国疾控中心北区公寓基础设施设备更新项目监理采购项目询价公告</a></p>
+        			<p class="search-con-text">报送询价响应文件时间
+2020年4月21 日 至2020 年 4月27日 9:00
+报送地点和方式
+北京市昌平区昌百路155号主楼 133室，因处于<font color=#FF0000>疫情</font>防控期间，请以快递方式邮寄送达
+开标时间
+2020 年 4月27日 10:30
+联系人及联系方式：
+项目联系人
+陈老师
+项目联系......</p>
+                    <span class="search-contxt-time">时间：2020-04-21</span>
+        		   
+                  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/jkzt/zywsyzdkz/fgtlglbf_10980/202004/t20200421_216317.html'  target="_blank">2020年《职业病防治法》宣传周海报与推荐宣传用语</a></p>
+        			<p class="search-con-text">
+海报点击下载
+2020年《职业病防治法》宣传周推荐宣传用语
+1.科学防控<font color=#FF0000>疫情</font>，健康工作随行
+2.健康工作环境，助力<font color=#FF0000>疫情</font>防控
+3.防控<font color=#FF0000>疫情</font>全民参与，职业健康你我有责
+4.众志成城，抗击<font color=#FF0000>疫情</font>，健康企业在行动
+5.抗击<font color=#FF0000>疫情</font>，共克时艰，从健康企业做起
+6.统筹推......</p>
+                    <span class="search-contxt-time">时间：2020-04-21</span>
+        		   
+                  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/jkzt/crb/zl/szkb_11803/jszl_11809/202004/t20200421_216310.html'  target="_blank">截至4月20日24时新型冠状病毒肺炎<font color=#FF0000>疫情</font>最新情况</a></p>
+        			<p class="search-con-text">
+4月20日0—24时，31个省（自治区、直辖市）和新疆生产建设兵团报告新增确诊病例11例，其中4例为境外输入病例，7例为本土病例（黑龙江6例，广东1例）；无新增死亡病例；新增疑似病例3例，其中2例为境外输入疑似病例，1例为本土疑似病例（黑龙江1例）。
+当日新增治愈出院病......</p>
+                    <span class="search-contxt-time">时间：2020-04-21</span>
+        		   
+                  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/jkzt/crb/zl/szkb_11803/jszl_11809/202004/t20200420_216302.html'  target="_blank">截至4月19日24时新型冠状病毒肺炎<font color=#FF0000>疫情</font>最新情况</a></p>
+        			<p class="search-con-text">
+4月19日0—24时，31个省（自治区、直辖市）和新疆生产建设兵团报告新增确诊病例12例，其中8例为境外输入病例，4例为本土病例（黑龙江3例，内蒙古1例）；无新增死亡病例；新增疑似病例2例，均为境外输入疑似病例（上海2例）。
+当日新增治愈出院病例22例，解除医学观察的密......</p>
+                    <span class="search-contxt-time">时间：2020-04-20</span>
+        		   
+                  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/yw_9324/202004/t20200420_216284.html'  target="_blank">【抗疫】环境所应波、宋世勋应急驰援黑龙江绥芬河</a></p>
+        			<p class="search-con-text">
+   
+    2020年4月11日是星期六，正在中国疾控中心环境所加班起草新冠肺炎<font color=#FF0000>疫情</font>防控相关技术方案的应波研究员接到所领导通知，按照国家卫生健康委的任务和中国疾控中心的安排，立即准备赴黑龙江绥芬河参加<font color=#FF0000>疫情</font>防控工作，两个小时后，便抵达机场，整装待发。与此同时，仍坚守在......</p>
+                    <span class="search-contxt-time">时间：2020-04-20</span>
+        		   
+                  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/jkzt/crb/zl/szkb_11803/jszl_11809/202004/t20200419_216280.html'  target="_blank">截至4月18日24时新型冠状病毒肺炎<font color=#FF0000>疫情</font>最新情况</a></p>
+        			<p class="search-con-text">
+4月18日0—24时，31个省（自治区、直辖市）和新疆生产建设兵团报告新增确诊病例16例，其中9例为境外输入病例，7例为本土病例（黑龙江6例，广东1例）；无新增死亡病例；新增疑似病例2例，其中1例为境外输入疑似病例，1例为本土疑似病例（内蒙古1例）。
+当日新增治愈出院病......</p>
+                    <span class="search-contxt-time">时间：2020-04-19</span>
+        		   
+                  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/jkzt/crb/zl/szkb_11803/jszl_11809/202004/t20200418_216272.html'  target="_blank">截至4月17日24时新型冠状病毒肺炎<font color=#FF0000>疫情</font>最新情况</a></p>
+        			<p class="search-con-text">
+4月17日0—24时，31个省（自治区、直辖市）和新疆生产建设兵团报告新增确诊病例27例，其中17例为境外输入病例，10例为本土病例（黑龙江7例，广东2例，四川1例）；无新增死亡病例；新增疑似病例5例，均为境外输入疑似病例（上海3例，黑龙江2例）。
+当日新增治愈出院病例50......</p>
+                    <span class="search-contxt-time">时间：2020-04-18</span>
+        		   
+                  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/jkzt/crb/zl/szkb_11803/jszl_11809/202004/t20200418_216273.html'  target="_blank">湖北省武汉市新冠肺炎<font color=#FF0000>疫情</font>数据订正情况</a></p>
+        			<p class="search-con-text">武汉市累计确诊病例50333例（核增325例），累计死亡病例3869例（核增1290例），累计出院病例46335例（核减965例）。 
+根据武汉市订正的<font color=#FF0000>疫情</font>数据汇总统计，截至4月16日24时，湖北省累计确诊病例68128例，累计死亡病例4512例，累计出院病例63487例；31个省（自治区、直辖市）和新疆生......</p>
+                    <span class="search-contxt-time">时间：2020-04-17</span>
+        		   
+                  
+                  
+        			<p class="search-title-text"><a href='http://www.chinacdc.cn/yw_9324/202004/t20200417_216255.html'  target="_blank">【抗疫】高福主任参加国家级公共卫生机构国际联盟新冠肺炎<font color=#FF0000>疫情</font>防控视频交流会</a></p>
+        			<p class="search-con-text">
+北京时间2020年4月15日下午，我中心与国家级公共卫生机构国际联盟（IANPHI）联合举办了新冠肺炎<font color=#FF0000>疫情</font>防控视频交流会，旨在与IANPHI各国家级公共卫生卫生机构负责人分享成员国遏制<font color=#FF0000>疫情</font>扩散蔓延的前沿信息与经验。高福主任率技术团队参会，作为特邀发言嘉宾在会上介绍中国疾控中心在......</p>
+                    <span class="search-contxt-time">时间：2020-04-17</span>
+        		   
+                  	
+
+
+
+                  <div id="search_page">
+                      <style>
+                          #search_page{
+                            text-align: center;
+                            margin-top: 20px;
+                            padding-top: 20px;
+                            border-top: 1px solid #ddd;
+                          }
+                           #search_page a{ display: inline-block; vertical-align: bottom;padding: 0px 13px; border: 1px solid #e6e6e6;background-color: #fff;color: #999999;height: 33px;line-height: 31px;margin: 2px;opacity: 0.9; }
+                           #search_page a:hover{ background-color:#4c94d1;color:#fff;}
+
+                             #search_page span{ display: inline-block; vertical-align: bottom;padding: 0px 14px;  background-color:#4c94d1 !important;color:#fff;height: 34px;line-height: 31px;margin: 2px;border: 1px solid #4c94d1 !important;font-weight: normal;}
+
+                        </style>
+                        <script type="text/javascript">
+                            var currentPage = 2;//所在页从0开始
+                            var prevPage = currentPage - 1 //上一页
+                            var nextPage = currentPage + 1 //下一页
+                            var zong = 4484;
+                            var ye = 20;
+                            var countPage = 1; //共多少页
+                            if (zong % 20 == 0)
+                                countPage = zong / 20;
+                            else
+                                countPage = Math.floor((zong + 20) / 20);
+        
+        
+        
+                            //设置上一页代码
+                            if (currentPage == 1)
+                                document.write("<a class='sy'>首页</a>&nbsp;<a class='syy'>上一页</a>&nbsp;");
+        
+                            //跳转页面
+                        </script>
+                        <a class="first-page" href="search?page=1&channelid=233877&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=-%E6%97%A5%E6%9C%9F&perpage=10&outlinepage=5&andsen=&total=&orsen=&exclude=&searchscope=&timescope=&timescopecolumn=&orderby=-%E6%97%A5%E6%9C%9F" target="_self">首页</a>&nbsp;<a class="prev-page" href="search?page=1&channelid=233877&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=-%E6%97%A5%E6%9C%9F&perpage=10&outlinepage=5&andsen=&total=&orsen=&exclude=&searchscope=&timescope=&timescopecolumn=&orderby=-%E6%97%A5%E6%9C%9F" target="_self">上一页</a>&nbsp;<a target="_self" href="search?page=1&channelid=233877&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=-%E6%97%A5%E6%9C%9F&perpage=10&outlinepage=5&andsen=&total=&orsen=&exclude=&searchscope=&timescope=&timescopecolumn=&orderby=-%E6%97%A5%E6%9C%9F">1</a>&nbsp;<span style="font-weight: bold;border: none;background: none">2</span>&nbsp;<a target="_self" href="search?page=3&channelid=233877&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=-%E6%97%A5%E6%9C%9F&perpage=10&outlinepage=5&andsen=&total=&orsen=&exclude=&searchscope=&timescope=&timescopecolumn=&orderby=-%E6%97%A5%E6%9C%9F">3</a>&nbsp;<a target="_self" href="search?page=4&channelid=233877&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=-%E6%97%A5%E6%9C%9F&perpage=10&outlinepage=5&andsen=&total=&orsen=&exclude=&searchscope=&timescope=&timescopecolumn=&orderby=-%E6%97%A5%E6%9C%9F">4</a>&nbsp;<a target="_self" href="search?page=5&channelid=233877&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=-%E6%97%A5%E6%9C%9F&perpage=10&outlinepage=5&andsen=&total=&orsen=&exclude=&searchscope=&timescope=&timescopecolumn=&orderby=-%E6%97%A5%E6%9C%9F">5</a>&nbsp;<a class="next-page" href="search?page=3&channelid=233877&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=-%E6%97%A5%E6%9C%9F&perpage=10&outlinepage=5&andsen=&total=&orsen=&exclude=&searchscope=&timescope=&timescopecolumn=&orderby=-%E6%97%A5%E6%9C%9F" target="_self">下一页</a>&nbsp;<a class="last-page" href="search?page=449&channelid=233877&searchword=%E7%96%AB%E6%83%85&keyword=%E7%96%AB%E6%83%85&orderby=-%E6%97%A5%E6%9C%9F&perpage=10&outlinepage=5&andsen=&total=&orsen=&exclude=&searchscope=&timescope=&timescopecolumn=&orderby=-%E6%97%A5%E6%9C%9F" target="_self">尾页</a>&nbsp;
+                        <script type="text/javascript">
+                            if (currentPage == countPage && currentPage != 2)
+                                document.write("<a class='xyy'>下一页</a>&nbsp;<a class='my'>尾页</a>&nbsp;");
+        
+        
+                            //跳转页面
+        
+        
+                            function toPage() {
+                                var _num = document.getElementById("num").value;
+                                if (isNaN(_num)) {
+                                    alert("请输入数字");
+                                    return false;
+                                }
+                                var str = "search?page=" + _num + "." + "html";
+                                var url = location.href.substring(0, location.href.lastIndexOf("/") + 1);
+                                if (_num <= 1 || _num == null)
+                                    location.href = url + "index" + "." + "html";
+                                else if (_num > countPage)
+                                    alert("本频道最多" + countPage + "页");
+                                else
+                                    location.href = url + str;
+                            }
+                        </script>
+        
+                    </div>
+
+                  
+                </div>    	
+                	
+        	</div>
+
+        	<!-- 查询出来内容的右边 -->
+        	<div class="searchResult-con_right ">
+        	     <div class="border-l timeFilter">
+        		 <span class="search-conright-timeTitle">全部时间</span>
+        		 <p><a  class="search-conright-timeCon" onclick="setTimeScope('');">时间不限</a></p>
+        		 <p><a  class="search-conright-timeCon" onclick="setTimeScope('week','发布时间');">一周内</a></p>
+        		 <p><a  class="search-conright-timeCon" onclick="setTimeScope('month','发布时间');">一月内</a></p>
+        		 <p><a  class="search-conright-timeCon" onclick="setTimeScope('date','发布时间');">一年内</a></p>
+        		 </div>
+  
+                 <div class="border-l rangeFilter">
+        		 <span class="search-conright-timeTitle mg-t_60">查询范围</span>
+        		 <p><a class="search-conright-timeCon" onclick="setSearchScope('');">所有结果</a></p>
+        		 <p><a class="search-conright-timeCon" onclick="setSearchScope('标题');">标题</a></p>
+        		 <p><a class="search-conright-timeCon" onclick="setSearchScope('正文');">正文</a></p>
+                 </div>
+
+                 <div class="border-l reaultFilter">  
+        		 <span class="search-conright-timeTitle mg-t_60">结果排序</span>
+        		 <p><a class="search-conright-timeCon" onclick="setOrderBy('RELEVANCE');">按相关度升序</a></p>
+        		 <p><a class="search-conright-timeCon" onclick="setOrderBy('-RELEVANCE');">按相关度降序</a></p>
+        		 <p><a class="search-conright-timeCon" onclick="setOrderBy('发布时间');">时间升序</a></p>
+        		 <p><a class="search-conright-timeCon" onclick="setOrderBy('-发布时间');">时间降序</a></p>
+        		  </div>
+				  
+				<script type="text/javascript">
+                    var orderBy = '-日期';
+                    if(orderBy=='RELEVANCE' && document.getElementById("tdsortrelevance")!=null){
+                        document.getElementById("tdsortrelevance").className="searchtoolsactive" ;
+                    }
+                    else if(orderBy=='-发布时间' && document.getElementById("tdsorttime")!=null){
+                        document.getElementById("tdsorttime").className="searchtoolsactive" ;
+                    }
+                </script>
+        	</div>
+
+        </div>    
+          <!-- 搜索内容区域结束 -->
+    </div>
+    <div class="footer width-page">
+            <div class="footer-nav">
+                <span class="title">网站导航</span>
+                <select name="" id="" style="margin-left: 34px;" class="footer_sel">
+                    <option value="">国务院相关单位</option>
+                </select>
+                <select name="" id="" style="margin-left: 34px;" class="footer_sel">
+                    <option value="">国务院相关单位</option>
+                </select>
+                <select name="" id="" style="margin-left: 34px;" class="footer_sel">
+                    <option value="">国务院相关单位</option>
+                </select>
+            </div>
+            <div class="footer-content">
+                <div class="footer-content-left">
+                    <span class="title">中国疾病预防控制中心 版权所有 版权与免责声明 京ICP备11024750号-1</span>
+                    <span class="title">中国疾控中心信息中心 内容管理与技术支持 建议使用1024*768 分辨率，IE7.0以上浏览器</span>
+                    <span class="title">地址：北京市昌平区昌百路155号 丨 邮编：102206 丨 行政值班电话：010-58900001 丨 健康咨询电话：12320 </span>
+                </div>
+                <div class="footer-content-right">
+                    <div class="qr-code">
+
+                        <div style="width: 80px; height: 80px; margin-right: 23px;">
+                            <img src="./images/f1.png" alt="" title="二维码">
+                        </div>
+                        <span>中国疾控中心</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+<script src="./js/jquery.min-jsearch.js"></script>
+<script src="./js/jSearch.js"></script>
+</html>
+
+
+
+

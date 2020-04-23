@@ -1,0 +1,644 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script id="allmobilize" charset="utf-8" src="http://ysp.www.gov.cn/efb21e959cfc1f75725c5f5df95ee8ff/allmobilize.min.js"></script>
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="alternate" media="handheld" href="#"/>
+<meta name="description" content="中国政府网搜索提供本网站信息的搜索，包括政府信息和在线服务等内容的搜索。">
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="alternate" media="handheld" href="#"/>
+<title>中国政府网站内搜索</title>
+<script type="text/javascript" src="http://sousuo.gov.cn/static/js/sim_selected.js"></script>
+<script type="text/javascript" src="http://sousuo.gov.cn/static/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="http://sousuo.gov.cn/static/js/jquery-ui-1.9.0.custom.min.js"></script>
+<script type="text/javascript" src="http://sousuo.gov.cn/static/js/jquery.date_input.pack.js"></script>
+<script type="text/javascript" src="http://sousuo.gov.cn/static/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script src="http://sousuo.gov.cn/static/js/guosou.autocomplete.js"></script>
+<script type="text/javascript" src="http://sousuo.gov.cn/static/js/checksearch.js"></script>
+<script type="text/javascript" src="http://sousuo.gov.cn/static/js/imagesloaded.pkgd.min.js"></script> 
+<script type="text/javascript" src="http://sousuo.gov.cn/static/js/search_option.js"></script> 
+<script>	
+$(function() {
+		//是不是要找
+		$('#yz').live('click',function(event){
+			$('#q').val('');
+			sub();
+			return false;
+		});
+		//相关
+		$('.xg').live('click',function(event){
+			var v = $(this).html();
+			$('#q').val(v);
+			sub();
+			return false;
+		});
+		//时间过滤
+		$('.tyl').live('click',function(event){
+			var timetype = $(this).attr("type");				
+			$('#_timetype').val(timetype);
+			$('#_fromtime').val('');
+			$('#_totime').val('');	
+			sub();
+			return false;				
+		});
+		//指定时间
+		$('#rjs').live('click',function(event){							
+			$('#_timetype').val('timezd');
+			var fromDate = $('#fromDate').val();
+			var toDate = $('#toDate').val();
+			if(fromDate == '' && toDate == '') {
+				$('#_timetype').val('timeqb');
+				sub();
+				return false;
+			}
+			//时间验证
+			var formatFromDate = formatDate(fromDate);
+			var formatToDate = formatDate(toDate);
+			flag = checktime(formatFromDate, formatToDate);
+			if (!flag) {
+				return false;
+			}
+							
+			$('#_fromtime').val(formatFromDate);
+			$('#_totime').val(formatToDate);				
+			sub();
+			return false;				
+		});
+		
+		$("#special").live("click",function(event){
+			//去除选中状态
+			$("#special").parent().parent().find("li").each(function(i , val){
+				$(val).removeClass("cur");
+			});
+			//选中当前元素
+			$("#special").parent().addClass("cur");
+			$("#specialDate").show();
+		});
+		
+		$(".sim-select ul").each(function(index,element){
+			var height = $(this).height();
+			if(height > 205) {
+				$(this).css({"height":"205", "overflow-y":"auto"});
+			}
+			if($(this).parent().parent().hasClass("div-out")){
+				$(this).css({"_z-index":"100"});
+			}
+		});		
+		
+		//显示时间控件
+	    $('#fromDate').datepicker({dateFormat: "yy-mm-dd"});
+	    $('#toDate').datepicker({dateFormat: "yy-mm-dd"});
+});
+</script>
+<script type="text/javascript">
+$(function() {
+	//提示词
+    addAutoCompleteInput("#q","http://sousuo.gov.cn/w.htm?t=govall",398,"13px","qform");
+    $("#search-select").val("govall");
+    $("#search-select-bottom").val("govall");
+    $(".right .12w").css("color","#FFF");
+    
+    //form表单，清除高级搜索信息然后提交网页。
+    $(".search-form").submit(function(){
+    	return clearAndSubmit(this);
+    });
+    
+    //单击清空搜索输入框
+    $('.del-key').click(function() {
+        $(this).siblings('.input-key').val('');
+    });
+    
+    //翻页
+    var maxPage = parseInt('417');
+    $('#toPage').submit(function(){
+    	var pageNum = $('#pnum').val();
+    	/* pageNum = trim(pageNum); */
+    	pageNum = CtoH(pageNum);
+    	if(pageNum == null || pageNum == "" || pageNum == 'undefined') {
+    		$('#pnum').focus();
+    		$('#pnum').css("background-color","#3297FD");
+    		$('#pnum').css("color","#FFF");
+    		return false;
+    	}
+    	if(!(/[0-9]+/.test(pageNum))) {
+    		$('#pnum').focus();
+    		$('#pnum').css("background-color","#3297FD");
+    		$('#pnum').css("color","#FFF");
+    		return false;
+    	}
+        var page = parseInt(pageNum);
+        if(!page || page < 1 || page > maxPage) {
+    		$('#pnum').focus();
+    		$('#pnum').css("background-color","#3297FD");
+    		$('#pnum').css("color","#FFF");
+    		return false;
+        }
+        $('#pnum').val(page);
+        return true;
+    });
+});
+
+//清除高级搜索信息而且提交网页
+function clearAndSubmit(form){
+	if(validateQ(true , form)){
+		$(".other-advance").each(function(){
+			$(this).val("");
+		});
+		$(".isadvance").val("false");
+		$(".sort-filter").each(function(){
+			$(this).val("");
+		});
+		return true;
+	} else {
+		return false;
+	}
+}
+
+//切换页面
+function clearAndChange( fm ){
+	//if(validateQ(false , fm)){
+		$(".other-advance").each(function(){
+			$(this).val("");
+		});
+		$(".isadvance").val("false");
+		$(".sort-filter").each(function(){
+			$(this).val("");
+		});
+		fm.submit();
+	//}
+}
+
+//校验q是否为空
+function validateQ(popup , form){
+	var result = true;
+	var val = $(form).find(".search-q").val();
+	val = trim(val);
+	$(form).find(".search-q").val(val);
+	if(val == null || val == "" || val == undefined){
+		result = false;
+	}
+	if(!result && popup){
+		alert("搜索词不能为空");
+	}
+	return result;
+}
+
+//把全角字符转成半角字符
+function CtoH(str){ 
+	var result="";
+	for (var i = 0; i < str.length; i++){
+		if (str.charCodeAt(i)==12288){
+			result+= String.fromCharCode(str.charCodeAt(i)-12256);
+			continue;
+		}
+		if (str.charCodeAt(i)>65280 && str.charCodeAt(i)<65375){
+			result+= String.fromCharCode(str.charCodeAt(i)-65248);
+		}
+		else {
+			result+= String.fromCharCode(str.charCodeAt(i));
+		}
+	}
+	return result;
+};
+
+function trim(str) {
+	return str.replace(/^\s\s*/, '' ).replace(/\s\s*$/, '' );
+}
+</script>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv = "X-UA-Compatible" content = "IE=edge,chrome=1" />
+<link rel="stylesheet" type="text/css" href="http://sousuo.gov.cn/static/css/base.css">
+<link rel="stylesheet" type="text/css" href="http://sousuo.gov.cn/static/css/jquery.ui.datepicker.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="http://sousuo.gov.cn/static/css/style.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="http://sousuo.gov.cn/static/css/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="http://sousuo.gov.cn/static/css/jquery.ui.datepicker.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="http://sousuo.gov.cn/static/css/date.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="http://sousuo.gov.cn/static/css/guosou.autocomplete.css"/>
+<link rel="stylesheet" type="text/css" href="http://sousuo.gov.cn/static/css/master_cn_v1.0.css" />
+<!--[if lt IE 7]>
+<script type="text/javascript" src="http://sousuo.gov.cn/static/js/iepng.js"></script>
+<script type="text/javascript">
+    ie_png.fix('.ui-icon');
+</script>
+<![endif]-->
+</head>
+
+<body>
+<div>
+	<iframe id="ifr_top" src="http://www.gov.cn/2016public/top.htm" width="100%" height="148" scrolling="no" marginheight="0" frameborder="0"></iframe>
+</div><div class="content">
+  <div class="search_main clearfix"> 
+    <!--左侧-->
+    <div class="gov-right">
+      <div class="searchbox clearfix">
+        <form target="_self" id="qform" action="http://sousuo.gov.cn/s.htm" method="get" class="search-form">
+          <select id="search-select" name="t" onchange='clearAndChange(this.form)'>
+         
+            <option value="govall" selected="selected">本网站搜索</option>
+            	<option value="paper">国务院文件搜索</option>
+            	<option value="bulletin">国务院公报搜索</option>
+            	<option value="image">图片搜索</option>
+            	<option value="video">视频搜索</option>
+            	</select>
+          <span class="round">
+	          <input type="hidden" class="isadvance" name="advance" value="false"/>
+<input name="n" class="other-advance" type="hidden" value="10"/>
+<input type="hidden" id="hidden_q" value="疫情"/>
+<input class="sort-filter" name="timetype" id="_timetype" type="hidden" value="timeqb"/>
+	         	    <input class="sort-filter" name="mintime" id="_fromtime"  type="hidden" value=""/>
+	                <input class="sort-filter" name="maxtime" id="_totime"  type="hidden" value=""/>
+	          	 <input class="sort-filter" name="sort" id="_sort" type="hidden" value=""/>
+	          <input name="q" id="q" tabindex="1" class="input-key search-q" value="疫情" maxlength="100" autocomplete="off" />
+	          <em class="del-key" id="delKey">删除</em> 
+          </span> 
+          <span class="button">
+          	  <input type="submit" tabindex="2" id="su" value="搜&nbsp;&nbsp;索" class="ui-btn"/>
+          </span> 
+          <span class="notice"> 
+          	  <a href="http://sousuo.gov.cn/a.htm?t=govall">高级搜索</a>		
+			  </span>  
+          <script type="text/javascript">new sim_select('search-select');</script>
+        </form>
+      </div>
+      <!-- video,govall -->
+<div class="search-sort">
+	<span class="total">找到4165条结果</span>
+	 排序方式：
+	 <strong>相关程度</strong>&nbsp;&nbsp;
+			<a href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&t=govall&timetype=timeqb&mintime=&maxtime=&sort=pubtime&sortType=1&nocorrect=">发布时间</a>
+		<!-- <span class="fr"><iframe width="330" height="25" name=" " frameborder="0" scrolling="no" src="http://www.gov.cn/home/Hot_words/index.htm"></iframe></span> -->
+</div>
+<div class="result">      
+      	<ul>
+		                	 <li class="res-list">
+													<h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/22/content_5504947.htm" target="_blank">4月21日<em>疫情</em>防控和复工复产最新消息!</a></h3>
+													<p class="res-sub">推迟举行原定于2020年5月16、23、30日举行的剑桥商务英语证书初级、高级和中级考试,具体考试时间及相关安排将根据<em>疫情</em>防控进展情况另行通知。</p>
+													<p class="res-other"><span class="sp">发布时间：2020.04.22</span></p>
+												</li>
+											<li class="res-list" style="overflow:visible">
+									<h3 class="res-title"><a href="s.htm?t=image&advance=false&n=&sort=&timetype=&mintime=&maxtime=&q=%E7%96%AB%E6%83%85" target="_blank">相关图片</a></h3>											
+									 <div style="overflow: inherit;z-index: 100;position: relative;margin-bottom: 5px;border: 0px none;font: inherit;margin: 0px;padding: 0px;vertical-align: baseline;list-style: outside none none;color: #222;">
+		        						<div style="position: relative;width: 588px;z-index: 11;margin-top: 5px;border: 0px none;font: inherit;margin: 0px;padding: 0px;vertical-align: baseline;list-style: outside none none;">
+											<div style="width: 682px;overflow: hidden;position: relative;border: 0px none;font: inherit;margin: 0px;padding: 0px;vertical-align: baseline;list-style: outside none none;" id="alaImgPics" _box_id="img">
+												<a style="display: inline-block;position: relative;overflow: hidden;vertical-align: middle;outline: medium none;margin-left: 0px;height: 94px;color: #00C;text-decoration: none;border: 0px none;font: inherit;margin: 0px;padding: 0px;" href="http://www.gov.cn/xinwen/2020-04/21/content_5504908.htm" target="_blank" class="imgList"><img style="border: 0px none;font: inherit;margin: 0px;padding: 0px;vertical-align: baseline;" height="110px" alt="" _b="http://www.gov.cn/c1471r/202004/5504908/images/70babf32ade64385b020fc4a3cc7c5b2.jpg" src="http://www.gov.cn/c1471r/202004/5504908/images/70babf32ade64385b020fc4a3cc7c5b2.jpg"></a><a style="display: inline-block;position: relative;overflow: hidden;vertical-align: middle;outline: medium none;margin-left: 0px;height: 94px;color: #00C;text-decoration: none;border: 0px none;font: inherit;margin: 0px;padding: 0px;" href="http://www.gov.cn/xinwen/2020-04/20/content_5504496.htm" target="_blank" class="imgList"><img style="border: 0px none;font: inherit;margin: 0px;padding: 0px;vertical-align: baseline;" height="110px" alt="" _b="http://www.gov.cn/c1465t/202004/5504496/images/4a57108678a1403d8bafce4170127451.jpg" src="http://www.gov.cn/c1465t/202004/5504496/images/4a57108678a1403d8bafce4170127451.jpg"></a><a style="display: inline-block;position: relative;overflow: hidden;vertical-align: middle;outline: medium none;margin-left: 0px;height: 94px;color: #00C;text-decoration: none;border: 0px none;font: inherit;margin: 0px;padding: 0px;" href="http://www.gov.cn/xinwen/2020-04/17/content_5503715.htm" target="_blank" class="imgList"><img style="border: 0px none;font: inherit;margin: 0px;padding: 0px;vertical-align: baseline;" height="110px" alt="" _b="http://www.gov.cn/c1463h/202004/5503715/images/736af2e235804ce89b864e94a3bb7359.jpg" src="http://www.gov.cn/c1463h/202004/5503715/images/736af2e235804ce89b864e94a3bb7359.jpg"></a><a style="display: inline-block;position: relative;overflow: hidden;vertical-align: middle;outline: medium none;margin-left: 0px;height: 94px;color: #00C;text-decoration: none;border: 0px none;font: inherit;margin: 0px;padding: 0px;" href="http://www.gov.cn/xinwen/2020-04/17/content_5503713.htm" target="_blank" class="imgList"><img style="border: 0px none;font: inherit;margin: 0px;padding: 0px;vertical-align: baseline;" height="110px" alt="" _b="http://www.gov.cn/c1471r/202004/5503713/images/f4e5cce01bf84aba924f8478394dcc21.jpg" src="http://www.gov.cn/c1471r/202004/5503713/images/f4e5cce01bf84aba924f8478394dcc21.jpg"></a></div>
+											<a target="_blank" style="top: -115.383px;left: 61px;height: 225px;width: 300px;display: none;opacity: 1;z-index: 10;color: #00C;}box-shadow: 0px 0px 10px #646464;outline: medium none;overflow: hidden;position: absolute;text-decoration: none;border: 0px none;font: inherit;margin: 0px;padding: 0px;vertical-align: baseline;list-style: outside none none;word-break: break-all;word-wrap: break-word;" id="lunabox_imgsearch_view" class="alaImgHoverview">
+												<img style="border: 0px none;font: inherit;margin: 0px;padding: 0px;vertical-align: baseline;list-style: outside none none;color: #00C;word-break: break-all;word-wrap: break-word;" width="206.1818181818182" height="300" src="" />
+											</a>
+										</div>
+		        					</div>     											
+								</li>
+							<li class="res-list">
+													<h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/21/content_5504941.htm" target="_blank">抗<em>疫情</em>、稳经济:施政报告指出澳门当务之急</a></h3>
+													<p class="res-sub">新华社澳门4月21日电(记者 王晨曦)澳门特区行政长官贺一诚20日在立法会发表2020年财政年度施政报告,提出“抗<em>疫情</em>、保就业、稳经济、顾民生、推改革、促发展”的2020年施政总体方向。</p>
+													<p class="res-other"><span class="sp">发布时间：2020.04.21</span></p>
+												</li>
+											<li class="res-list">
+													<h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/21/content_5504869.htm" target="_blank"><em>疫情</em>期间北京部分社区家庭医生电话预约送药上门</a></h3>
+													<p class="res-sub">新华社北京4月21日电(记者 乌梦达)<em>疫情</em>期间,一些慢性病患者的长期用药受到影响。记者从北京市西城区了解到,为方便老年人安全用药、降低交叉感染风险,这个区有271支家庭医生团队与15个街道259个社区...</p>
+													<p class="res-other"><span class="sp">发布时间：2020.04.21</span></p>
+												</li>
+											<li class="res-list">
+                                  <h3 class="res-title"><a href="s.htm?t=video&timetype=&mintime=&maxtime=&q=%E7%96%AB%E6%83%85" target="_blank">相关视频</a></h3>											
+                                  <div class="res-video2">
+                                      <ul>
+                                      	<li><a href="http://www.gov.cn/xinwen/2020-04/20/content_5504447.htm" title="入境城市本土关联病例已引发聚集性疫情" target="_blank"><span><img src="http://www.gov.cn/c1463h/202004/5504447/images/bf7983071a4c4f2895385287e9e39ac9.jpg"/><i></i></span>入境城市本土关联病例已引发聚集性<em>疫情</em></a></li>
+                                      	  <li><a href="http://www.gov.cn/xinwen/2020-04/20/content_5504531.htm" title="国务院联防联控机制发布会:经陆地边境输入风险仍在上升 守牢重点城市和口岸疫情防控关口" target="_blank"><span><img src="http://www.gov.cn/c1463h/202004/5504531/images/4ff14554739546dcb5cf42d035c5332e.jpg"/><i></i></span>国务院联防联控机制发布会:经陆地边境输入风险仍在上升 守牢重点城市和口岸<em>疫情</em>防控关口</a></li>
+                                      	  <li><a href="http://www.gov.cn/xinwen/2020-04/17/content_5503679.htm" title="新冠肺炎疫情数据订正" target="_blank"><span><img src="http://www.gov.cn/c1463h/202004/5503679/images/05f4bf591f3a4aa697bab9281f279631.jpg"/><i></i></span>新冠肺炎<em>疫情</em>数据订正</a></li>
+                                      	  </ul>	
+                                  </div>																																
+								</li>
+								
+							<li class="res-list">
+				                                  <h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/21/content_5504908.htm" target="_blank">人社部:我国<em>疫情</em>防控急需的相关职业短缺程度加大</a></h3>
+				                                  <div class="res-people">
+				                                      <div class="res-people-left">
+				                                          <a href="http://www.gov.cn/xinwen/2020-04/21/content_5504908.htm" target="_blank"><img height="78" width="120" src="http://www.gov.cn/c1471r/202004/5504908/images/70babf32ade64385b020fc4a3cc7c5b2.jpg"/></a>
+				                                      </div>
+				                                      <div class="res-people-right w575">
+				                                          <p class="res-sub">图表:人社部:我国<em>疫情</em>防控急需的相关职业短缺程度加大 新华社发 边纪红 制图</p>
+				                                          <p class="res-other"><span class="sp">发布时间：2020.04.21</span></p>
+				                                      </div>
+				                                  </div>
+				                                </li>
+											<li class="res-list">
+													<h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/22/content_5505000.htm" target="_blank">澳门社会各界累计捐助超过6亿澳门元支援内地抗击<em>疫情</em></a></h3>
+													<p class="res-sub">新华社澳门4月21日电(记者 王晨曦)记者21日从中央政府驻澳门联络办公室获悉,自新冠肺炎<em>疫情</em>开始以来,澳门社会各界向内地捐款捐物累计超过6亿澳门元,支援内地抗击<em>疫情</em>。</p>
+													<p class="res-other"><span class="sp">发布时间：2020.04.22</span></p>
+												</li>
+											<li class="res-list">
+													<h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/22/content_5505012.htm" target="_blank">支持实体 稳定经济——以更大力度宏观政策对冲<em>疫情</em>影响</a></h3>
+													<p class="res-sub">支持实体 稳定经济 以更大力度宏观政策对冲<em>疫情</em>影响 今年一季度极不寻常,突如其来的新冠肺炎<em>疫情</em>对我国经济社会发展带来前所未有的冲击。</p>
+													<p class="res-other"><span class="sp">发布时间：2020.04.22</span></p>
+												</li>
+											<li class="res-list">
+				                                  <h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/22/content_5505084.htm" target="_blank">哈尔滨:加紧生产医用隔离眼罩助力<em>疫情</em>防控</a></h3>
+				                                  <div class="res-people">
+				                                      <div class="res-people-left">
+				                                          <a href="http://www.gov.cn/xinwen/2020-04/22/content_5505084.htm" target="_blank"><img height="78" width="120" src="http://www.gov.cn/c1465t/202004/5505084/images/08427600f66b4fcc9edfdfc386769d64.jpg"/></a>
+				                                      </div>
+				                                      <div class="res-people-right w575">
+				                                          <p class="res-sub">工人在黑龙江鑫达企业集团有限公司医用隔离眼罩生产线进行质检作业(4月21日摄)。 近日,黑龙江鑫达企业集团有限公司加紧生产医用隔离眼罩,支援国内<em>疫情</em>防控一线,同时保证出口国外的订单需求。</p>
+				                                          <p class="res-other"><span class="sp">发布时间：2020.04.22</span></p>
+				                                      </div>
+				                                  </div>
+				                                </li>
+											<li class="res-list">
+													<h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/22/content_5505088.htm" target="_blank">中国专家向沙特华侨华人介绍新冠<em>疫情</em>防控知识</a></h3>
+													<p class="res-sub">新华社利雅得4月21日电(记者 涂一帆)中国政府赴沙特阿拉伯抗疫医疗专家组21日以视频连线的形式,向在沙中资机构人员、华侨华人和留学生介绍新冠<em>疫情</em>防控知识。 该讲座由中国驻沙特大使馆举办。</p>
+													<p class="res-other"><span class="sp">发布时间：2020.04.22</span></p>
+												</li>
+											<li class="res-list">
+													<h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/22/content_5505044.htm" target="_blank">世界知识产权组织再次举行视频会议 讨论<em>疫情</em>期间知识产权临时政策和救济措施</a></h3>
+													<p class="res-sub">世界知识产权组织再次举行视频会议 讨论<em>疫情</em>期间知识产权临时政策和救济措施 申长雨出席会议并发言 北京时间4月20日,世界知识产权组织(wipo)再次举行视频会议,讨论<em>疫情</em>期间知识产权临时政策和救济措施。</p>
+													<p class="res-other"><span class="sp">发布时间：2020.04.22</span></p>
+												</li>
+											<li class="res-list">
+													<h3 class="res-title"><a href="http://www.gov.cn/xinwen/2020-04/22/content_5504993.htm" target="_blank">截至4月21日24时新型冠状病毒肺炎<em>疫情</em>最新情况</a></h3>
+													<p class="res-sub">4月21日0—24时,31个省(自治区、直辖市)和新疆生产建设兵团报告新增确诊病例30例,其中23例为境外输入病例,7例为本土病例(黑龙江7例);无新增死亡病例;新增疑似病例3例,均为境外输入疑似病例。</p>
+													<p class="res-other"><span class="sp">发布时间：2020.04.22</span></p>
+												</li>
+											<li class="res-list">		
+									<h3 class="res-title">																						
+										<a href="s.htm?t=paper&advance=false&n=&sort=&timetype=&mintime=&maxtime=&q=%E7%96%AB%E6%83%85" target="_blank">相关公文</a>
+									</h3>
+									<div class="res-wenjian">
+										<p>
+											<a href="http://www.gov.cn/zhengce/content/2020-04/03/content_5498474.htm" target="_blank">国务院办公厅关于为新冠肺炎<em>疫情</em>牺牲烈士和逝世同胞举行全国性哀悼活动的通知</a>													
+											<span style="float:right">2020.04.03</span>        
+										</p>		
+										<p>
+											<a href="http://www.gov.cn/zhengce/content/2020-04/08/content_5500371.htm" target="_blank">国务院应对新型冠状病毒感染肺炎<em>疫情</em>联防联控机制关于印发新冠病毒无症状感染者管理规范的通知</a>													
+											<span style="float:right">2020.04.08</span>        
+										</p>		
+										<p>
+											<a href="http://www.gov.cn/zhengce/content/2020-04/08/content_5500372.htm" target="_blank">国务院应对新型冠状病毒感染肺炎<em>疫情</em>联防联控机制关于印发新冠肺炎出院患者复诊复检工作方案(试行)的通知</a>													
+											<span style="float:right">2020.04.08</span>        
+										</p>		
+										<p>
+											<a href="http://www.gov.cn/zhengce/content/2020-04/09/content_5500698.htm" target="_blank">中央应对新型冠状病毒感染肺炎<em>疫情</em>工作领导小组关于在有效防控<em>疫情</em>的同时积极有序推进复工复产的指导意见</a>													
+											<span style="float:right">2020.04.09</span>        
+										</p>		
+										</div>
+								</li>
+							</ul>
+					</div>
+      
+      <div id="page" class="page">
+	<strong>1</strong>
+				<a target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=1&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">2</a>
+					<a target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=2&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">3</a>
+					<a target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=3&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">4</a>
+					<a target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=4&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">5</a>
+					<a target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=5&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">6</a>
+					<a target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=6&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">7</a>
+					<a target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=7&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">8</a>
+					<a target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=8&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">9</a>
+					<a target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=9&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">10</a>
+					<a id="snext" target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=1&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">下一页&gt;</a>
+				<a id="snext" target="_self" href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=416&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&sortType=1&nocorrect=">尾页</a>
+					
+	共417页&nbsp;&nbsp;
+	<form id="toPage" action="http://sousuo.gov.cn/s.htm" method="get" target="_self" style="display:inline">
+	到第<input name="p" id="pnum" class="page-int" type="text" value="1"/>页 
+		<input type="submit" value="确定" class="page-btn" />
+		<input name="q" type="hidden" value="疫情"/>
+		<input name="n" type="hidden" value="10"/>
+		<input name="t" type="hidden" value="govall"/>
+		<input name="sort" type="hidden" value=""/>
+		<input name="sortType" type="hidden" value="1"/>
+		<input name="nocorrect" type="hidden" value=""/>
+		<input name="timetype" type="hidden" value="timeqb"/>
+        <input name="mintime"  type="hidden" value=""/>
+        <input name="maxtime"  type="hidden" value=""/>
+		<input type="hidden" class="isadvance" name="advance" value="false"/>
+<input name="n" class="other-advance" type="hidden" value="10"/>
+<input type="hidden" id="hidden_q" value="疫情"/>
+<input name="offsetp" type="hidden" value="-1"/>
+	</form>
+</div>
+<div class="relation">
+               <table>
+                   <tr>
+					<th rowspan="2" class="tt">相关搜索：</th>
+					<th><a href="http://sousuo.gov.cn/s.htm?t=govall&q=%E6%AF%8F%E5%A4%A9%E5%85%AC%E5%B8%83%E7%96%AB%E6%83%85">每天公布疫情</a></th><td></td>
+                       <th><a href="http://sousuo.gov.cn/s.htm?t=govall&q=%E5%90%84%E5%9C%B0%E4%B8%A5%E9%98%B2%E7%8C%AA%E6%B5%81%E6%84%9F%E7%96%AB%E6%83%85">各地严防猪流感疫情</a></th><td></td>
+                       <th><a href="http://sousuo.gov.cn/s.htm?t=govall&q=%E9%9D%9E%E5%85%B8%E5%9E%8B%E8%82%BA%E7%82%8E%E7%96%AB%E6%83%85">非典型肺炎疫情</a></th><td></td>
+                       <th><a href="http://sousuo.gov.cn/s.htm?t=govall&q=%E5%8F%8A%E6%97%B6%E6%B6%88%E6%AF%92%E9%A2%84%E9%98%B2%E7%96%AB%E6%83%85">及时消毒预防疫情</a></th><td></td>
+                       <th><a href="http://sousuo.gov.cn/s.htm?t=govall&q=%E8%8B%8F%E4%B8%B9%E5%8F%91%E7%8E%B0%E7%A6%BD%E6%B5%81%E6%84%9F%E7%96%AB%E6%83%85">苏丹发现禽流感疫情</a></th><td></td>
+                       </tr><tr>
+						<th><a href="http://sousuo.gov.cn/s.htm?t=govall&q=%E7%A6%BD%E6%B5%81%E6%84%9F%E7%96%AB%E6%83%85%E7%BB%A7%E7%BB%AD%E6%89%A9%E6%95%A3">禽流感疫情继续扩散</a></th><td></td>
+                       <th><a href="http://sousuo.gov.cn/s.htm?t=govall&q=%E5%85%B3%E6%B3%A8%E5%9F%83%E5%8D%9A%E6%8B%89%E7%96%AB%E6%83%85">关注埃博拉疫情</a></th><td></td>
+                       </tr>
+               </table>
+           </div>
+	<div class="searchbox searchbox-bottom">
+  <form action="http://sousuo.gov.cn/s.htm" method="get" target="_self" class="search-form">
+    <select id="search-select-bottom" name="t" onchange='clearAndChange(this.form)'>
+            <option value="govall" selected="selected">本网站搜索</option>
+            <option value="paper" >国务院文件搜索</option>
+            <option value="bulletin" >国务院公报搜索</option>            
+            <option value="image" >图片搜索</option>
+            <option value="video" >视频搜索</option>
+    </select>
+    <span class="round">
+	    <input type="hidden" class="isadvance" name="advance" value="false"/>
+<input name="n" class="other-advance" type="hidden" value="10"/>
+<input type="hidden" id="hidden_q" value="疫情"/>
+<input class="sort-filter" name="timetype" type="hidden" value="timeqb"/>
+	    		<input class="sort-filter" name="mintime"  type="hidden" value=""/>
+	    		<input class="sort-filter" name="maxtime"  type="hidden" value=""/>
+	    	<input class="sort-filter" name="sort" type="hidden" value=""/>
+	    <input name="q" tabindex="1" class="input-key search-q" value="疫情" maxlength="100" autocomplete="off" />
+	    <em class="del-key">删除</em> 
+    </span> 
+    <span class="button">
+    	<input type="submit" tabindex="2" id="su" value="搜&nbsp;&nbsp;索" class="ui-btn"/>
+    </span> 
+    <span class="notice helplink"> 
+    	<a href="http://sousuo.gov.cn/a.htm?t=govall">高级搜索</a><br/>
+    	<a href="http://sousuo.gov.cn/static/help/index.html" target="_blank">帮助</a> 
+    </span> 
+    <script type="text/javascript">new sim_select('search-select-bottom');</script>
+  </form>
+</div>
+</div>
+    <!--左侧 end--> 
+    
+    <!--右侧-->
+    <div class="gov-left">
+      <div class="search-nav">
+        <div class="search-nav-sort type-sort">
+          <h2>类型</h2>
+          <ul class="sort-list">
+            <li class="cur"><a href="javascript:void(0);" target="_self">信息稿件</a></li>
+            <li><a href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&t=paper" target="_self">国务院文件</a></li>
+            <li><a href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&t=bulletin" target="_self">国务院公报</a></li>
+            <li><a href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&t=image" target="_self">图片搜索</a></li>
+            <li><a href="http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&t=video" target="_self">视频搜索</a></li>
+          </ul>
+        </div>
+        <div class="search-nav-sort time-sort">
+            <h2>时间</h2>
+            <ul class="sort-list">
+                <li 
+                
+                class="cur"
+                
+                ><a href="javascript:void(0);" target="_self" class="tyl" type="timeqb">全部</a></li>
+                <li
+                
+                ><a href="javascript:void(0);" target="_self" class="tyl" type="timeyt">一天内</a></li>
+                <li
+                
+                ><a href="javascript:void(0);" target="_self" class="tyl" type="timeyz">一周内</a></li>
+                <li
+                
+                ><a href="javascript:void(0);" target="_self" class="tyl" type="timeyy">一月内</a></li>
+                <li
+                
+                ><a href="javascript:void(0);" target="_self" class="tyl" type="timeyn">一年内</a></li>
+                <li
+                
+                ><a id="special" href="javascript:void(0);">指定日期</a></li>
+                <li id="specialDate" class="fixed-date"  
+                style="display:none"
+                >
+                    <p>从：<input  id="fromDate" class="date-input" type="text" value=""/></p><div><span id="fromDatespan"></span></div>
+                    <p>到：<input  id="toDate" class="date-input" type="text" value=""/></p><div><span id="toDatespan"></span></div>
+                    <p class="btn">
+                        <input id="rjs" type="button" value="搜索" class="ui-btn"/>
+                    </p>
+                </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+    <!--右侧 end--> 
+</div>
+</div>
+
+<script type="text/javascript">
+//image zoom
+$(function(){
+    function ajaxImgObj(_dom,_win){
+        this.elm = $(_dom);
+        this.win = $(_win);
+        if(!this.elm.length || !this.win.length)return false;
+        this.active = false;
+        this.img = null; 
+        this.loaded = false;
+    }
+    ajaxImgObj.prototype = {
+            init:function(){
+                this.load();
+                var _self = this;
+                //bind Event
+                this.elm.bind('mouseenter',function(e){
+                    _self.active = true;
+                    if(_self.loaded){
+                        _self.show(e);
+                    }
+                });
+                this.elm.bind('mouseout',function(e){
+                    _self.close();
+                });
+                this.elm.bind('mousemove',function(e){
+                    if(_self.loaded){
+                        _self.show(e);
+                    }
+                });
+                
+            },
+            close:function(){
+                this.active = false;
+                this.win.stop().hide();
+            },
+            show:function(e){
+                if(!this.active) return false;
+                var parentTop = $('#alaImgPics').offset().top,
+                    parentLeft = $('#alaImgPics').offset().left;
+                var scrollTop = document.body.scrollTop||document.documentElement.scrollTop;
+                var scrollLeft = document.body.scrollLeft||document.documentElement.scrollLeft;
+                var clientHeight = (document.documentElement.clientHeight||document.body.clientHeight);
+                    clientHeight += scrollTop;
+                var mouseLeft = e.clientX+scrollLeft,
+                    mouseTop = e.clientY+scrollTop;
+                //计算展示的top和left
+                var nleft = mouseLeft-parentLeft+20,
+                    ntop = mouseTop-parentTop+20;
+                //计算最终展示的高和宽
+                var oh = this.img.height,
+                    ow = this.img.width,
+                    nh=0,nw=0;
+                if(oh>300||ow>300){
+                    var rh = oh-300,rw = ow-300;
+                    if(rh>=rw){
+                        //长型
+                        nh=300;
+                        nw=(300*ow)/oh;
+                    }else{
+                        //宽型
+                        nw=300;
+                        nh=(300*oh)/ow;
+                    }
+                }else{
+                    nh = oh;
+                    nw = ow;
+                }
+                if(ntop+parentTop+nh>clientHeight){
+                    ntop = clientHeight-nh-parentTop;
+                }
+                this.win.children('img').attr('src',this.img.src).attr('width',nw).attr('height',nh);
+                this.win.css({
+                        top:ntop,
+                        left:nleft,
+                        height:nh,
+                        width:nw
+                    }).fadeIn();
+            },
+            load:function(){
+                this.img = new Image();
+                var _self = this;
+                this.img.onload = function(){
+                    _self.loaded = true;
+                }
+                this.img.src = this.elm.children('img').attr('_b');
+            }
+    }
+    var imgs = [];
+    $('#alaImgPics>a').each(function(idx,elm){
+           var tmp =new ajaxImgObj(elm,$('#lunabox_imgsearch_view')); 
+           tmp.init();
+            imgs.push(tmp);
+    }); 
+});
+$('#alaImgPics').imagesLoaded().done( function( instance ) {
+(function($){
+var boxWidth = $('#alaImgPics').width();
+var picSize = $('#alaImgPics img').size();
+var width = 0;
+var _limit_new = picSize;
+
+for(var i=0; i <picSize; i++){
+var w = $('#alaImgPics img').eq(i).width();
+width += w;
+if(width > boxWidth){
+_limit_new = i - 1;
+break;
+}
+}
+$('#alaImgPics img:gt('+_limit_new+')').hide();
+})(jQuery);
+});
+</script>
+
+<div>
+<iframe id="ifr_foot.htm" src="http://www.gov.cn/2016public/bottom.htm" width="100%" height="525" scrolling="no" marginheight="0" frameborder="0"></iframe>
+</div>
+<script type="text/javascript">
+ 	function changeSortType(sortType) {
+ 		window.location.href = "http://sousuo.gov.cn/s.htm?q=%E7%96%AB%E6%83%85&n=10&p=&t=govall&timetype=timeqb&mintime=&maxtime=&sort=&nocorrect=&sortType=" + sortType; 		
+	}
+</script>
+<script type="text/javascript" src="http://static.gridsumdissector.com/js/Clients/GWD-801026-069B76/gs.js"></script></body>
+</html>
