@@ -24,7 +24,7 @@ class MockParserDelegate:
 
     def append_request_task(self, task: Task):
         logger.info((f'Append task with url {task.url}, type {task.type_}, reference {task.reference},'
-                     f' method {task.metadata}, body {task.body}, metadata {task.metadata}'))
+                     f' method {task.method}, params {task.params}, body {task.body}, metadata {task.metadata}'))
 
 
 def test_list_parser():
@@ -67,6 +67,21 @@ def test_cnr_search_list_parser():
     parser.parse(url, data, {})
 
 
+def test_xinhua_search_list_parser():
+    url = f'http://so.news.cn/getNews'
+    params = {
+        'keyword': '疫情',
+        'curPage': 0,
+        'sortField': 0,
+        'searchFields': 1,
+        'lang': 'cn',
+    }
+    task = Task(url, '', '', params=params)
+    data = _load_html_file('./test_files/xinhua_list.json')
+    parser = get_parser(url, MockParserDelegate())
+    parser.parse(task, data)
+
+
 def test_people_search_list_parser():
     url = 'http://search.people.com.cn/cnpeople/news/getNewsResult.jsp'
     task = Task(url, '', '')
@@ -87,6 +102,14 @@ def test_sina_news_search_list_parser():
     url = 'https://search.sina.com.cn/?q=%E7%96%AB%E6%83%85&range=all&c=news&sort=time'
     task = Task(url, '', '')
     data = _load_html_file('./test_files/sina_news_list.html')
+    parser = get_parser(url, MockParserDelegate())
+    parser.parse(task, data)
+
+
+def test_gov_search_list_parser():
+    url = 'http://sousuo.gov.cn/s.htm?t=govall&q=%E7%96%AB%E6%83%85'
+    task = Task(url, '', '')
+    data = _load_html_file('./test_files/gov_list.html')
     parser = get_parser(url, MockParserDelegate())
     parser.parse(task, data)
 
