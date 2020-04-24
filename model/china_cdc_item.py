@@ -4,7 +4,7 @@ from mongoengine import StringField
 
 
 class ChinaCdcItem(Document):
-    url = StringField(primary_key=True, required=True)
+    url = StringField(required=True)
     keyword = StringField(required=True)
     title = StringField(required=True)
     abstract = StringField()

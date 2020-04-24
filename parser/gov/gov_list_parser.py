@@ -48,7 +48,7 @@ class GovListParser(Parser):
             self._parse_next_page_request(task, html)
 
         for item in items:
-            self.delegate.save_content(item, 'cnr')
+            self.delegate.save_content(item, 'gov')
 
     def _parse_search_item(self, html: _Element, metadata: dict) -> Optional[GovItem]:
         elements = html.xpath('h3/a')
@@ -61,11 +61,10 @@ class GovListParser(Parser):
         if not title:
             print('')
 
-        # abstract_elements = html.xpath('p[@class="res-sub"]')
-        # if not abstract_elements:
-        #     return None
-        #
-        # abstract = get_element_str(abstract_elements[0])
+        abstract = ''
+        abstract_elements = html.xpath('p[@class="res-sub"]')
+        if abstract_elements:
+            abstract = get_element_str(abstract_elements[0])
 
         try:
             element = html.xpath('.//p[@class="res-other"]/span')
@@ -82,7 +81,7 @@ class GovListParser(Parser):
         item.title = title
         item.url = url
         item.keyword = metadata.get('keyword', '')
-        item.abstract = ''
+        item.abstract = abstract
         item.publish = publish
 
         return item

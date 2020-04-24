@@ -47,19 +47,12 @@ class ChinaListParser(Parser):
                     need_next_page = True
             index += 4
 
-        # for element in elements:
-        #     item = self._parse_search_item(element, task.metadata)
-        #     if item:
-        #         items.append(item)
-        #         if item.publish >= begin:
-        #             need_next_page = True
-
         # Parse link for next page
         if need_next_page:
             self._parse_next_page_request(task, html)
 
         for item in items:
-            self.delegate.save_content(item, 'cnr')
+            self.delegate.save_content(item, 'china')
 
     def _parse_search_item(self, html1: _Element, html2: _Element, html3: _Element, metadata: dict) -> Optional[ChinaItem]:
         elements = html1.xpath('./td/a')
@@ -105,7 +98,10 @@ class ChinaListParser(Parser):
             value = int(matchs[0])
 
             body = task.body
-            body['page'] = value
+            if 'page' in body:
+                body['page'] += 1
+            else:
+                body['page'] = value
 
             self.delegate.append_request_task(Task(task.url, '', task.url, method='POST',
                                                    body=body, metadata=task.metadata))

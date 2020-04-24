@@ -52,7 +52,7 @@ class ChinaCdcListParser(Parser):
             self._parse_next_page_request(task, html)
 
         for item in items:
-            self.delegate.save_content(item, 'cnr')
+            self.delegate.save_content(item, 'china_cdc')
 
     def _parse_search_item(self, html1: _Element, html2: _Element, html3: _Element, metadata: dict) -> Optional[ChinaCdcItem]:
         title = get_element_str(html1)

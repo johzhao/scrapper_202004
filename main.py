@@ -19,7 +19,7 @@ KEYWORDS = [
     '新冠',
     '肺炎',
     '武汉',
-    # 'COVID-19',
+    'COVID-19',
     '冠状病毒',
     '疫情',
 ]
@@ -128,7 +128,6 @@ def add_sina_news_tasks(scheduler: Scheduler):
             'keyword': keyword,
         }
         scheduler.append_request_task(Task(url, '', '', metadata=metadata))
-        break
 
 
 def add_gov_tasks(scheduler: Scheduler):
@@ -158,12 +157,13 @@ def add_china_tasks(scheduler: Scheduler):
         url = 'http://search1.china.com.cn/search/searchcn.jsp'
         body = {
             'searchText': search_key,
+            'submit': '搜索',
             'nodeid': '',
             'strKeyword': '',
             'strUrl': '',
             'strNodename': '',
             'sourcename=': '',
-            'LateTag': 1,
+            'LateTag': '',
             'strFromdate': '',
             'strTodate': '',
             'strSortBy': 0,
@@ -205,7 +205,7 @@ def main():
     # add_gov_tasks(scheduler)
     # add_china_cdc_tasks(scheduler)
     # add_china_tasks(scheduler)
-    add_cctv_tasks(scheduler)
+    # add_cctv_tasks(scheduler)
 
     scheduler.start()
     scheduler.join()

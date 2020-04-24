@@ -28,20 +28,13 @@ class Scheduler(threading.Thread):
         self.storage.save_content(content, type_)
 
     def append_request_task(self, task: Task):
-        if self.count <= 5:
-            self.task_queue.push_task(task)
-            self.count += 1
+        self.task_queue.push_task(task)
+        # if self.count <= 50:
+        #     self.task_queue.push_task(task)
+        #     self.count += 1
 
     def run(self) -> None:
         while True:
-            # task = self.task_queue.get_top_task('detail')
-            # if task is None:
-            #     task = self.task_queue.get_top_task('list')
-            # if task is None:
-            #     task = self.task_queue.get_top_task('comment')
-            # if task is None:
-            #     task = self.task_queue.get_top_task('comment_first')
-
             task = self.task_queue.get_top_task()
             if task is None:
                 break
@@ -64,18 +57,3 @@ class Scheduler(threading.Thread):
             delay = config.DOWNLOAD_DELAY
             logger.info(f'Delay for {delay} seconds.')
             time.sleep(delay)
-
-    # def _get_top_task(self) -> Optional[Task]:
-    #     result = self.task_queue.get_top_task('list')
-    #     if result is not None:
-    #         return result
-    #
-    #     result = self.task_queue.get_top_task('detail')
-    #     if result is not None:
-    #         return result
-    #
-    #     result = self.task_queue.get_top_task('comment')
-    #     if result is not None:
-    #         return result
-    #
-    #     return None

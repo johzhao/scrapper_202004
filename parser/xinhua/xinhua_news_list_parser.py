@@ -80,7 +80,7 @@ class XinHuaNewsListParser(Parser):
         #     self._parse_next_page_request(task, html)
 
         for item in items:
-            self.delegate.save_content(item, 'cnr')
+            self.delegate.save_content(item, 'xinhua')
 
     def _parse_search_item(self, html: _Element, metadata: dict) -> Optional[XinHuaNewsItem]:
         elements = html.xpath('h2/a')

@@ -49,7 +49,7 @@ class CCTVListParser(Parser):
             self._parse_next_page_request(task, html)
 
         for item in items:
-            self.delegate.save_content(item, 'cnr')
+            self.delegate.save_content(item, 'cctv')
 
     def _parse_search_item(self, html: _Element, metadata: dict) -> Optional[CctvItem]:
         elements = html.xpath('.//h3/span/a')
