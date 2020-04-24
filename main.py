@@ -5,6 +5,7 @@ from mongoengine import connect
 
 import config
 from export.export import export_task_3
+from export.export_task_4 import export_task_4
 from model.sina_topic import SinaTopic
 from model.task import Task
 
@@ -186,7 +187,8 @@ def add_cctv_tasks(scheduler: Scheduler):
 
 
 def export():
-    export_task_3('./output/task_1_2.xlsx')
+    # export_task_3('./output/task_1_2.xlsx')
+    export_task_4('./output/task_4.xlsx')
     pass
 
 
@@ -207,10 +209,10 @@ def main():
     # add_china_tasks(scheduler)
     # add_cctv_tasks(scheduler)
 
-    scheduler.start()
-    scheduler.join()
+    # scheduler.start()
+    # scheduler.join()
 
-    # export()
+    export()
 
 
 if __name__ == '__main__':
