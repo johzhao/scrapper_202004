@@ -17,8 +17,8 @@ logger.addHandler(logging.NullHandler())
 class TopicListParser(Parser):
     read_comment_count_pattern = re.compile(r'(.+)?讨论\s(.+)?阅读')
 
-    def __init__(self, delegate):
-        super().__init__(delegate)
+    def __init__(self):
+        super().__init__()
 
     def parse(self, url: str, content: str):
         html = etree.HTML(content, etree.HTMLParser())
@@ -26,6 +26,7 @@ class TopicListParser(Parser):
         if len(elements) == 0:
             raise Exception(f'Failed to parse comments from {content}')
 
+        items = []
         for element in elements:
             name, url = self._parse_topic_name_and_url(element)
             read_count, comment_count = self._parse_read_and_comment_count(element)
@@ -38,7 +39,10 @@ class TopicListParser(Parser):
             item.comment_count = comment_count
             item.created = datetime.now()
 
-            self.delegate.save_content(item, 'weibo_topic')
+            items.append(item)
+
+        for item in items:
+            yield item
 
     def _parse_topic_name_and_url(self, html: _Element) -> (str, str):
         elements = html.xpath('div/a[@class="name"]')

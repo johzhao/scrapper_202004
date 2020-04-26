@@ -1,3 +1,6 @@
+import datetime
+
+
 HEADERS = {
     'User-Agent': ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) '
                    'Chrome/81.0.4044.92 Safari/537.36'),
@@ -8,10 +11,10 @@ HEADERS = {
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
     'Cookie': '',
-    'Referer': 'http://search1.china.com.cn/search/searchcn.jsp',
-    'Origin': 'http://search1.china.com.cn',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Upgrade-Insecure-Requests': '1',
+    # 'Referer': 'http://search1.china.com.cn/search/searchcn.jsp',
+    # 'Origin': 'http://search1.china.com.cn',
+    # 'Content-Type': 'application/x-www-form-urlencoded',
+    # 'Upgrade-Insecure-Requests': '1',
 }
 
 MONGO_HOST = 'localhost'
@@ -25,9 +28,13 @@ REDIS_DB_DATABASE = 0
 
 DOWNLOAD_DELAY = 10
 
-KEYWORD = '新冠'
-# KEYWORD = '肺炎'
-# KEYWORD = '武汉'
-# KEYWORD = 'COVID-19'
-# KEYWORD = '冠状病毒'
-# KEYWORD = '疫情'
+KEYWORDS = [
+    '新冠',
+    '肺炎',
+    '武汉',
+    'COVID-19',
+    '冠状病毒',
+    '疫情',
+]
+
+BEGIN_DATE = datetime.datetime(2020, 1, 10)

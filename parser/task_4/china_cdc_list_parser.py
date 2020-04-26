@@ -11,7 +11,8 @@ from lxml import etree
 # noinspection PyProtectedMember
 from lxml.etree import _Element
 
-from model.china_cdc_item import ChinaCdcItem
+import config
+from model.task_4_items import ChinaCdcItem
 from model.task import Task
 from parser.parser import Parser
 from parser.utility import get_element_str
@@ -23,8 +24,8 @@ logger.addHandler(logging.NullHandler())
 class ChinaCdcListParser(Parser):
     publish_time_pattern = re.compile(r'(.*?)：(\d+)-(\d+)-(\d+)')
 
-    def __init__(self, delegate):
-        super().__init__(delegate)
+    def __init__(self):
+        super().__init__()
 
     def parse(self, task: Task, content: str):
         html = etree.HTML(content, etree.HTMLParser())
@@ -36,23 +37,23 @@ class ChinaCdcListParser(Parser):
             raise Exception(f'Failed to parse item from {content}')
 
         need_next_page = False
-        begin = datetime.datetime(2020, 1, 10)
-        end = datetime.datetime(2020, 4, 11)
         items = []
         count = len(titles)
         for index in range(count):
             item = self._parse_search_item(titles[index], contents[index], publishs[index], task.metadata)
             if item:
                 items.append(item)
-                if item.publish >= begin:
+                if item.publish >= config.BEGIN_DATE:
                     need_next_page = True
 
         # Parse link for next page
         if need_next_page:
-            self._parse_next_page_request(task, html)
+            new_task = self._parse_next_page_request(task, html)
+            if new_task:
+                yield new_task
 
         for item in items:
-            self.delegate.save_content(item, 'china_cdc')
+            yield item
 
     def _parse_search_item(self, html1: _Element, html2: _Element, html3: _Element, metadata: dict) -> Optional[ChinaCdcItem]:
         title = get_element_str(html1)
@@ -80,14 +81,14 @@ class ChinaCdcListParser(Parser):
 
         return item
 
-    def _parse_next_page_request(self, task: Task, html: _Element):
+    def _parse_next_page_request(self, task: Task, html: _Element) -> Optional[Task]:
         element = html.xpath('//a[@class="next-page"]')
         if not element:
-            return
+            return None
 
         element = element[0]
         url = element.attrib['href']
         if not url.startswith('http'):
             url = urljoin(task.url, url)
 
-        self.delegate.append_request_task(Task(url, '', task.url, metadata=task.metadata))
+        return Task(url, '', task.url, metadata=task.metadata)

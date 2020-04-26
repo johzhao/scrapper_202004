@@ -23,8 +23,8 @@ class SearchListParser(Parser):
     forward_pattern = re.compile(r'转发\s*(\d*)')
     comment_pattern = re.compile(r'评论\s*(\d*)')
 
-    def __init__(self, delegate):
-        super().__init__(delegate)
+    def __init__(self):
+        super().__init__()
 
     def parse(self, url: str, content: str):
         html = etree.HTML(content, etree.HTMLParser())
@@ -63,7 +63,7 @@ class SearchListParser(Parser):
             items.append(item)
 
         for item in items:
-            self.delegate.save_content(item, 'weibo')
+            yield item
 
     def _parse_username(self, html: _Element) -> str:
         elements = html.xpath('div[@class="info"]//a[@class="name"]')
@@ -104,6 +104,7 @@ class SearchListParser(Parser):
     def _parse_publish_time(self, html: _Element) -> datetime:
         elements = html.xpath('p[@class="from"]/a')
 
+        publish_time_str = ''
         for element in elements:
             publish_time_str = element.text.strip()
 
@@ -114,8 +115,9 @@ class SearchListParser(Parser):
 
             publish_matchs = self.publish_time_pattern_4.findall(publish_time_str)
             if len(publish_matchs) == 1:
-                return datetime.datetime(int(publish_matchs[0][0]), int(publish_matchs[0][1]), int(publish_matchs[0][2]),
-                                         int(publish_matchs[0][3]), int(publish_matchs[0][4]))
+                return datetime.datetime(int(publish_matchs[0][0]), int(publish_matchs[0][1]),
+                                         int(publish_matchs[0][2]), int(publish_matchs[0][3]),
+                                         int(publish_matchs[0][4]))
 
             publish_matchs = self.publish_time_pattern_2.findall(publish_time_str)
             if len(publish_matchs) == 1:

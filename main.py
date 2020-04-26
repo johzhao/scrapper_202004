@@ -1,12 +1,8 @@
 import logging
 import urllib.parse
 
-from mongoengine import connect
-
 import config
-from export.export import export_task_3
 from export.export_task_4 import export_task_4
-from model.sina_topic import SinaTopic
 from model.task import Task
 
 log_format = ' %(asctime)s - %(levelname)s - %(filename)s - %(lineno)s - %(message)s'
@@ -16,65 +12,67 @@ from scheduler.scheduler import Scheduler
 
 logger = logging.getLogger(__name__)
 
-KEYWORDS = [
-    '新冠',
-    '肺炎',
-    '武汉',
-    'COVID-19',
-    '冠状病毒',
-    '疫情',
-]
-
 
 def add_topic_search_tasks(scheduler: Scheduler):
-    for index in range(50):
-        url = ''
-        reference_url = ''
-        keyword = urllib.parse.quote(config.KEYWORD)
-        if index == 0:
-            url = f'https://s.weibo.com/topic?q={keyword}&pagetype=topic&topic=1&Refer=weibo_topic'
-        else:
-            url = f'https://s.weibo.com/topic?q={keyword}&pagetype=topic&topic=1&Refer=weibo_topic&page={index + 1}'
-            reference_url = f'https://s.weibo.com/topic?q={keyword}&pagetype=topic&topic=1&Refer=weibo_topic&page={index}'
+    for keyword in config.KEYWORDS:
+        search_keyword = urllib.parse.quote(keyword)
+        for index in range(50):
+            reference_url = ''
+            if index == 0:
+                url = f'https://s.weibo.com/topic?q={search_keyword}&pagetype=topic&topic=1&Refer=weibo_topic'
+            else:
+                url = f'https://s.weibo.com/topic?q={search_keyword}&pagetype=topic&topic=1&Refer=weibo_topic' \
+                      f'&page={index + 1}'
+                reference_url = f'https://s.weibo.com/topic?q={search_keyword}&pagetype=topic&topic=1' \
+                                f'&Refer=weibo_topic&page={index}'
 
-        scheduler.append_url(url, '', reference_url)
-    pass
+            scheduler.append_request_task(Task(url, '', reference_url, metadata={
+                'keyword': keyword
+            }))
 
 
 def add_weibo_hot_search_tasks(scheduler: Scheduler):
-    for index in range(50):
-        keyword = urllib.parse.quote(config.KEYWORD)
-        if index == 0:
-            url = f'https://s.weibo.com/weibo?q={keyword}&xsort=hot&suball=1&timescope=custom:2020-01-10-0:2020-04-10-23&Refer=g'
-            reference_url = ''
-        else:
-            url = f'https://s.weibo.com/weibo?q={keyword}&xsort=hot&suball=1&timescope=custom:2020-01-10-0:2020-04-10-23&Refer=g&page={index}'
-            reference_url = f'https://s.weibo.com/weibo?q={keyword}&xsort=hot&suball=1&timescope=custom:2020-01-10-0:2020-04-10-23&Refer=g&page={index - 1}'
-        scheduler.append_url(url, '', reference_url)
+    for keyword in config.KEYWORDS:
+        search_keyword = urllib.parse.quote(keyword)
+        for index in range(50):
+            if index == 0:
+                url = (f'https://s.weibo.com/weibo?q={search_keyword}&xsort=hot&suball=1'
+                       f'&timescope=custom:2020-01-10-0:2020-04-10-23&Refer=g')
+                reference_url = ''
+            else:
+                url = (f'https://s.weibo.com/weibo?q={search_keyword}&xsort=hot&suball=1'
+                       f'&timescope=custom:2020-01-10-0:2020-04-10-23&Refer=g&page={index}')
+                reference_url = (f'https://s.weibo.com/weibo?q={search_keyword}&xsort=hot&suball=1'
+                                 f'&timescope=custom:2020-01-10-0:2020-04-10-23&Refer=g&page={index - 1}')
+            scheduler.append_request_task(Task(url, '', reference_url, metadata={
+                'keyword': keyword
+            }))
 
 
-def add_topic_detail_tasks(scheduler: Scheduler):
-    connect(config.MONGO_DATABASE, host=config.MONGO_HOST, port=config.MONGO_PORT)
-    urls = set()
-    for topic in SinaTopic.objects:
-        if topic.url:
-            urls.add(topic.url)
-
-    for url in urls:
-        scheduler.append_url(url, '', '')
+# def add_topic_detail_tasks(scheduler: Scheduler):
+#     connect(config.MONGO_DATABASE, host=config.MONGO_HOST, port=config.MONGO_PORT)
+#     urls = set()
+#     for topic in SinaTopic.objects:
+#         if topic.url:
+#             urls.add(topic.url)
+#
+#     for url in urls:
+#         scheduler.append_url(url, '', '')
 
 
 def add_cnr_search_task(scheduler: Scheduler):
-    for keyword in KEYWORDS:
+    for keyword in config.KEYWORDS:
         search_key = urllib.parse.quote(keyword)
-        url = f'http://was.cnr.cn/was5/web/search?page=2&channelid=234439&searchword={search_key}&keyword={search_key}&orderby=LIFO&was_custom_expr=%28{search_key}%29&perpage=10&outlinepage=1&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude='
+        url = (f'http://was.cnr.cn/was5/web/search?page=2&channelid=234439&searchword={search_key}'
+               f'&keyword={search_key}&orderby=LIFO&was_custom_expr=%28{search_key}%29&perpage=10'
+               f'&outlinepage=1&searchscope=&timescope=&timescopecolumn=&orderby=LIFO&andsen=&total=&orsen=&exclude=')
         scheduler.append_request_task(Task(url, '', '', metadata={
             'keyword': keyword
         }))
 
 
 def add_xinhua_search_task(scheduler: Scheduler):
-    for keyword in KEYWORDS:
+    for keyword in config.KEYWORDS:
         search_key = urllib.parse.quote(keyword)
         url = f'http://so.news.cn/getNews'
         params = {
@@ -90,9 +88,10 @@ def add_xinhua_search_task(scheduler: Scheduler):
 
 
 def add_people_search_tasks(scheduler: Scheduler):
-    for keyword in KEYWORDS:
+    for keyword in config.KEYWORDS:
         search_key = urllib.parse.quote(keyword, encoding='gbk')
-        url = f'http://search.people.com.cn/cnpeople/search.do?pageNum=2&keyword={search_key}&siteName=news&facetFlag=true&nodeType=belongsId&nodeId=0'
+        url = (f'http://search.people.com.cn/cnpeople/search.do?pageNum=2&keyword={search_key}'
+               f'&siteName=news&facetFlag=true&nodeType=belongsId&nodeId=0')
         body = {
             'keyword': search_key,
             'pageNum': 1,
@@ -109,7 +108,7 @@ def add_people_search_tasks(scheduler: Scheduler):
 
 
 def add_china_news_tasks(scheduler: Scheduler):
-    for keyword in KEYWORDS:
+    for keyword in config.KEYWORDS:
         search_key = urllib.parse.quote(keyword)
         url = f'http://sou.chinanews.com/search.do'
         body = {
@@ -122,7 +121,7 @@ def add_china_news_tasks(scheduler: Scheduler):
 
 
 def add_sina_news_tasks(scheduler: Scheduler):
-    for keyword in KEYWORDS:
+    for keyword in config.KEYWORDS:
         search_key = urllib.parse.quote(keyword)
         url = f'https://search.sina.com.cn/?q={search_key}&range=all&c=news&sort=time'
         metadata = {
@@ -132,7 +131,7 @@ def add_sina_news_tasks(scheduler: Scheduler):
 
 
 def add_gov_tasks(scheduler: Scheduler):
-    for keyword in KEYWORDS:
+    for keyword in config.KEYWORDS:
         search_key = urllib.parse.quote(keyword)
         url = f'http://sousuo.gov.cn/s.htm?t=govall&q={search_key}'
         metadata = {
@@ -142,7 +141,7 @@ def add_gov_tasks(scheduler: Scheduler):
 
 
 def add_china_cdc_tasks(scheduler: Scheduler):
-    for keyword in KEYWORDS:
+    for keyword in config.KEYWORDS:
         search_key = urllib.parse.quote(keyword)
         url = (f'http://www.chinacdc.cn/was5/web/search?searchword={search_key}&channelid=233877&timescope=&'
                f'timescopecolumn=&orderby=-%E6%97%A5%E6%9C%9F&perpage=10&searchscope=')
@@ -153,7 +152,7 @@ def add_china_cdc_tasks(scheduler: Scheduler):
 
 
 def add_china_tasks(scheduler: Scheduler):
-    for keyword in KEYWORDS:
+    for keyword in config.KEYWORDS:
         search_key = urllib.parse.quote(keyword)
         url = 'http://search1.china.com.cn/search/searchcn.jsp'
         body = {
@@ -177,9 +176,10 @@ def add_china_tasks(scheduler: Scheduler):
 
 
 def add_cctv_tasks(scheduler: Scheduler):
-    for keyword in KEYWORDS:
+    for keyword in config.KEYWORDS:
         search_key = urllib.parse.quote(keyword)
-        url = f'https://search.cctv.com/search.php?qtext={search_key}&sort=relevance&type=web&vtime=&datepid=1&channel=&page=1'
+        url = (f'https://search.cctv.com/search.php?qtext={search_key}&sort=relevance&type=web&vtime='
+               f'&datepid=1&channel=&page=1')
         metadata = {
             'keyword': keyword,
         }
@@ -193,8 +193,8 @@ def export():
 
 
 def main():
+    # noinspection PyUnusedLocal
     scheduler = Scheduler()
-    # scheduler.append_url('https://www.dianping.com/search/keyword/2/0_%E4%B9%A6%E5%BA%97%E9%9F%B3%E5%83%8F', 'list', '')
 
     # add_topic_search_tasks(scheduler)
     # add_topic_detail_tasks(scheduler)

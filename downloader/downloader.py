@@ -15,7 +15,7 @@ class Downloader:
         self.session = requests.session()
         self.session.headers.update(headers)
 
-    def download_url(self, task: Task) -> str:
+    def download_task(self, task: Task) -> str:
         logger.info((f'Prepare to download the url {task.url} with the reference {task.reference}, '
                      f'params {task.params}'))
 

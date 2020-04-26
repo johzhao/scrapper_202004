@@ -10,7 +10,8 @@ from lxml import etree
 # noinspection PyProtectedMember
 from lxml.etree import _Element
 
-from model.people_item import PeopleItem
+import config
+from model.task_4_items import PeopleItem
 from model.task import Task
 from parser.parser import Parser
 
@@ -20,8 +21,8 @@ logger.addHandler(logging.NullHandler())
 
 class PeopleListParser(Parser):
 
-    def __init__(self, delegate):
-        super().__init__(delegate)
+    def __init__(self):
+        super().__init__()
 
     def parse(self, task: Task, content: str):
         html = etree.HTML(content, etree.HTMLParser())
@@ -30,25 +31,23 @@ class PeopleListParser(Parser):
             raise Exception(f'Failed to parse item from {content}')
 
         need_next_page = False
-        begin = datetime.datetime(2020, 1, 10)
-        end = datetime.datetime(2020, 4, 11)
         items = []
         for element in elements:
             item = self._parse_search_item(element, task.metadata)
             if item:
                 items.append(item)
                 need_next_page = True
-                # if item.publish >= begin:
-                #     need_next_page = True
-                #     if item.publish <= end:
-                #         items.append(item)
+                if item.publish >= config.BEGIN_DATE:
+                    need_next_page = True
 
         # Parse link for next page
         if need_next_page:
-            self._parse_next_page_request(task, html)
+            new_task = self._parse_next_page_request(task, html)
+            if new_task:
+                yield new_task
 
         for item in items:
-            self.delegate.save_content(item, 'people')
+            yield item
 
     def _parse_search_item(self, html: _Element, metadata: dict) -> Optional[PeopleItem]:
         element = html.xpath('li/b/a')[0]
@@ -74,10 +73,10 @@ class PeopleListParser(Parser):
 
         return item
 
-    def _parse_next_page_request(self, task: Task, html: _Element):
+    def _parse_next_page_request(self, task: Task, html: _Element) -> Optional[Task]:
         element = html.xpath('//div[@class="show_nav_bar"]/a')
         if not element:
-            return
+            return None
 
         element = element[-1]
         if element.text == '下一页':
@@ -88,4 +87,5 @@ class PeopleListParser(Parser):
             path = normpath(url_components.path)
             next_page_url = urlunparse((url_components.scheme, url_components.netloc, path, url_components.params,
                                       url_components.query, url_components.fragment))
-            self.delegate.append_request_task(Task(next_page_url, '', task.url, metadata=task.metadata))
+
+            return Task(next_page_url, '', task.url, metadata=task.metadata)

@@ -11,7 +11,8 @@ from lxml import etree
 # noinspection PyProtectedMember
 from lxml.etree import _Element
 
-from model.china_item import ChinaItem
+import config
+from model.task_4_items import ChinaItem
 from model.task import Task
 from parser.parser import Parser
 from parser.utility import get_element_str
@@ -24,8 +25,8 @@ class ChinaListParser(Parser):
     publish_time_pattern = re.compile(r'(.*?)\s+(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)')
     next_page_pattern = re.compile(r'javascript:gopage\((\d+)\)')
 
-    def __init__(self, delegate):
-        super().__init__(delegate)
+    def __init__(self):
+        super().__init__()
 
     def parse(self, task: Task, content: str):
         html = etree.HTML(content, etree.HTMLParser())
@@ -34,8 +35,6 @@ class ChinaListParser(Parser):
             raise Exception(f'Failed to parse item from {content}')
 
         need_next_page = False
-        begin = datetime.datetime(2020, 1, 10)
-        end = datetime.datetime(2020, 4, 11)
         items = []
         index = 0
         count = len(elements)
@@ -43,16 +42,18 @@ class ChinaListParser(Parser):
             item = self._parse_search_item(elements[index+1], elements[index+2], elements[index+3], task.metadata)
             if item:
                 items.append(item)
-                if item.publish >= begin:
+                if item.publish >= config.BEGIN_DATE:
                     need_next_page = True
             index += 4
 
         # Parse link for next page
         if need_next_page:
-            self._parse_next_page_request(task, html)
+            new_task = self._parse_next_page_request(task, html)
+            if new_task:
+                yield new_task
 
         for item in items:
-            self.delegate.save_content(item, 'china')
+            yield item
 
     def _parse_search_item(self, html1: _Element, html2: _Element, html3: _Element, metadata: dict) -> Optional[ChinaItem]:
         elements = html1.xpath('./td/a')
@@ -83,10 +84,10 @@ class ChinaListParser(Parser):
 
         return item
 
-    def _parse_next_page_request(self, task: Task, html: _Element):
+    def _parse_next_page_request(self, task: Task, html: _Element) -> Optional[Task]:
         element = html.xpath('//form[@id="page_form"]//a')
         if not element:
-            return
+            return None
 
         element = element[-1]
         if element.text == '[下一页]':
@@ -94,7 +95,7 @@ class ChinaListParser(Parser):
 
             matchs = self.next_page_pattern.findall(url)
             if not matchs:
-                return
+                return None
             value = int(matchs[0])
 
             body = task.body
@@ -103,5 +104,4 @@ class ChinaListParser(Parser):
             else:
                 body['page'] = value
 
-            self.delegate.append_request_task(Task(task.url, '', task.url, method='POST',
-                                                   body=body, metadata=task.metadata))
+            return Task(task.url, '', task.url, method='POST', body=body, metadata=task.metadata)

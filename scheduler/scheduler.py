@@ -2,14 +2,12 @@ import logging
 import threading
 import time
 
-from mongoengine import Document
-
 import config
 from downloader.downloader import Downloader
+from model.parsed_result_item import ParsedResultItem
 from model.task import Task
 from parser.parser_builder import get_parser
 from scheduler.task_queue import TaskQueue
-from storage.storage import Storage
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -20,12 +18,9 @@ class Scheduler(threading.Thread):
     def __init__(self):
         super().__init__()
         self.downloader = Downloader(config.HEADERS)
-        self.storage = Storage(config.MONGO_DATABASE, config.MONGO_HOST, config.MONGO_PORT)
+        # self.storage = Storage(config.MONGO_DATABASE, config.MONGO_HOST, config.MONGO_PORT)
         self.task_queue = TaskQueue(config.REDIS_DB_URL, config.REDIS_DB_DATABASE)
         self.count = 0
-
-    def save_content(self, content: Document, type_: str):
-        self.storage.save_content(content, type_)
 
     def append_request_task(self, task: Task):
         self.task_queue.push_task(task)
@@ -39,10 +34,17 @@ class Scheduler(threading.Thread):
             if task is None:
                 break
 
-            content = self.downloader.download_url(task)
+            content = self.downloader.download_task(task)
             try:
-                parser = get_parser(task.url, self)
-                parser.parse(task, content)
+                parser = get_parser(task.url)
+                for item in parser.parse(task, content):
+                    if isinstance(item, Task):
+                        self.task_queue.push_task(task)
+                    elif isinstance(item, ParsedResultItem):
+                        item.__class__.store_item(item)
+                    else:
+                        raise Exception(f'Unsupported parse result: class={item.__class__}')
+
             except Exception as e:
                 with open('exception.html', 'w') as ofile:
                     ofile.write(content)
