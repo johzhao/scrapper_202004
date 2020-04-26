@@ -38,8 +38,9 @@ class Scheduler(threading.Thread):
                 parser = get_parser(task.url)
                 for item in parser.parse(task, content):
                     if isinstance(item, Task):
-                        self.task_queue.push_task(task)
+                        self.task_queue.push_task(item)
                     elif isinstance(item, ParsedResultItem):
+                        logger.info(f'Save the parsed item {item}')
                         item.__class__.store_item(item)
                     else:
                         raise Exception(f'Unsupported parse result: class={item.__class__}')

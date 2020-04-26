@@ -19,9 +19,10 @@ class Task4BaseItem(ParsedResultItem):
 
     @classmethod
     def store_item(cls, item: 'Task4BaseItem'):
+        item.created = datetime.datetime.now()
         cls.objects(keyword=item.keyword, url=item.url)\
             .update_one(title=item.title, abstract=item.abstract, publish=item.publish,
-                        created=datetime.datetime.now(), upsert=True)
+                        created=item.created, upsert=True)
 
     def __str__(self):
         return f'<{self.type_} item title={self.title}, keyword={self.keyword}, url={self.url}, publish={self.publish}>'

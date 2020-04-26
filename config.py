@@ -10,11 +10,12 @@ HEADERS = {
     'Accept-Language': 'zh-CN,zh;q=0.9',
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
-    'Cookie': '',
+    'Pragma': 'no-cache',
+    'Upgrade-Insecure-Requests': '1',
+    # 'Cookie': '',
     # 'Referer': 'http://search1.china.com.cn/search/searchcn.jsp',
     # 'Origin': 'http://search1.china.com.cn',
     # 'Content-Type': 'application/x-www-form-urlencoded',
-    # 'Upgrade-Insecure-Requests': '1',
 }
 
 MONGO_HOST = 'localhost'
@@ -26,7 +27,7 @@ REDIS_DB_URL = 'redis://localhost:6379'
 REDIS_DB_DATABASE = 0
 
 
-DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1
 
 KEYWORDS = [
     '新冠',

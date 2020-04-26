@@ -14,6 +14,7 @@ from model.task_4_items import CnrItem
 
 import config
 from model.task import Task
+from parser import utility
 from parser.parser import Parser
 
 logger = logging.getLogger(__name__)
@@ -51,8 +52,13 @@ class CnrListParser(Parser):
 
     def _parse_search_item(self, html: _Element, metadata: dict) -> Optional[CnrItem]:
         element = html.xpath('div[1]/a')[0]
-        title = element.text
+        title = utility.get_element_str(element)
         url = element.attrib['href']
+
+        element = html.xpath('div[2]')
+        abstract = ''
+        if element:
+            abstract = utility.get_element_str(element[0])
 
         try:
             element = html.xpath('div/span[@class="searchresulturl"]')
@@ -65,6 +71,7 @@ class CnrListParser(Parser):
         item = CnrItem()
         item.title = title
         item.url = url
+        item.abstract = abstract
         item.keyword = metadata.get('keyword', '')
         item.publish = publish
 
