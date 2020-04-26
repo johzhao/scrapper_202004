@@ -6,18 +6,18 @@ from mongoengine import StringField
 from model.parsed_result_item import ParsedResultItem
 
 
-# class SinaWeibo(ParsedResultItem):
-#     keyword = StringField(required=True)
-#     url = StringField(required=True)
-#     title = StringField(required=True)
-#     username = StringField(required=True)
-#     publish = DateTimeField(required=True)
-#     content = StringField()
-#     forward_count = IntField()
-#     comment_count = IntField()
-#     favor_count = IntField()
-#     created = DateTimeField()
-#
+class SinaWeibo(ParsedResultItem):
+    keyword = StringField(required=True)
+    url = StringField(required=True)
+    title = StringField(required=True)
+    username = StringField(required=True)
+    publish = DateTimeField(required=True)
+    content = StringField()
+    forward_count = IntField()
+    comment_count = IntField()
+    favor_count = IntField()
+    created = DateTimeField()
+
 #     @classmethod
 #     def store_item(cls, item: 'ParsedResultItem'):
 #         cls.objects(keyword=item.keyword, topic=item.topic, date=item.date)\

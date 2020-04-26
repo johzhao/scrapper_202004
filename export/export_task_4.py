@@ -5,27 +5,19 @@ from functools import partial
 import xlsxwriter
 import xlsxwriter.worksheet
 
-from model import cctv_item
-from model import china_cdc_item
-from model import china_item
-from model import china_news_item
-from model import cnr_item
-from model import gov_item
-from model import people_item
-from model import sina_news_item
-from model import xinhua_news_item
+from model import task_4_items
 
 
 MODELS = {
-    '央广网': cnr_item.CnrItem,
-    '新华网': xinhua_news_item.XinHuaNewsItem,
-    # '人民网': people_item.PeopleItem,
-    # '中国新闻网': china_news_item.ChinaNewsItem,
-    '新浪新闻': sina_news_item.SinaNewsItem,
-    '中国政府网': gov_item.GovItem,
-    '中国疾病预防控制中心': china_cdc_item.ChinaCdcItem,
-    # '中国网': china_item.ChinaItem,
-    '央视网': cctv_item.CctvItem,
+    '央广网': task_4_items.CnrItem,
+    '新华网': task_4_items.XinHuaNewsItem,
+    # '人民网': task_4_items.PeopleItem,
+    # '中国新闻网': task_4_items.ChinaNewsItem,
+    '新浪新闻': task_4_items.SinaNewsItem,
+    '中国政府网': task_4_items.GovItem,
+    '中国疾病预防控制中心': task_4_items.ChinaCdcItem,
+    # '中国网': task_4_items.ChinaItem,
+    '央视网': task_4_items.CctvItem,
 }
 
 KEYWORDS = [

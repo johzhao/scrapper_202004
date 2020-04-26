@@ -18,7 +18,6 @@ class Scheduler(threading.Thread):
     def __init__(self):
         super().__init__()
         self.downloader = Downloader(config.HEADERS)
-        # self.storage = Storage(config.MONGO_DATABASE, config.MONGO_HOST, config.MONGO_PORT)
         self.task_queue = TaskQueue(config.REDIS_DB_URL, config.REDIS_DB_DATABASE)
         self.count = 0
 

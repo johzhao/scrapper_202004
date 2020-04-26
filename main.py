@@ -1,6 +1,8 @@
 import logging
 import urllib.parse
 
+from mongoengine import connect
+
 import config
 from export.export_task_4 import export_task_4
 from model.task import Task
@@ -193,6 +195,8 @@ def export():
 
 
 def main():
+    connect(config.MONGO_DATABASE, host=config.MONGO_HOST, port=config.MONGO_PORT)
+
     # noinspection PyUnusedLocal
     scheduler = Scheduler()
 
@@ -209,10 +213,10 @@ def main():
     # add_china_tasks(scheduler)
     # add_cctv_tasks(scheduler)
 
-    # scheduler.start()
-    # scheduler.join()
+    scheduler.start()
+    scheduler.join()
 
-    export()
+    # export()
 
 
 if __name__ == '__main__':

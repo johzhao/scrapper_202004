@@ -168,8 +168,8 @@ def _load_html_file(filepath: str, encodeing='utf-8'):
 def _parse(parser, task, data):
     for item in parser.parse(task, data):
         if isinstance(item, Task):
-            logger.info((f'Append task with url {task.url}, type {task.type_}, reference {task.reference}, '
-                         f'method {task.method}, params {task.params}, body {task.body}, metadata {task.metadata}'))
+            logger.info((f'Append task with url {item.url}, type {item.type_}, reference {item.reference}, '
+                         f'method {item.method}, params {item.params}, body {item.body}, metadata {item.metadata}'))
         elif isinstance(item, ParsedResultItem):
             logger.info(f'Save parsed item {item}')
         else:
