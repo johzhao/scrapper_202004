@@ -190,15 +190,13 @@ def add_cctv_tasks(scheduler: Scheduler):
 
 def export():
     # export_task_3('./output/task_1_2.xlsx')
-    export_task_4('./output/task_4.xlsx')
-    pass
+    export_task_4('./output/task_4_v2.xlsx')
 
 
 def main():
     connect(config.MONGO_DATABASE, host=config.MONGO_HOST, port=config.MONGO_PORT)
 
-    # noinspection PyUnusedLocal
-    scheduler = Scheduler()
+    # scheduler = Scheduler()
 
     # add_topic_search_tasks(scheduler)
     # add_topic_detail_tasks(scheduler)
@@ -213,8 +211,8 @@ def main():
     # add_china_tasks(scheduler)
     # add_cctv_tasks(scheduler)
 
-    scheduler.start()
-    scheduler.join()
+    # scheduler.start()
+    # scheduler.join()
 
     # export()
 

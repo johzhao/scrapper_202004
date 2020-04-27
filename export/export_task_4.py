@@ -32,36 +32,46 @@ KEYWORDS = [
 
 def export_task_4(filepath: str):
     with xlsxwriter.Workbook(filepath) as wbk:
+        sheet = wbk.add_worksheet('task_4')
+        row = 0
+        _export_header(sheet, row)
         for key, value in MODELS.items():
-            sheet = wbk.add_worksheet(key)
-            _export_worksheet_items(value, sheet)
+            row = _export_worksheet_items(key, value, row, sheet)
 
 
-def _export_worksheet_items(item_class, sheet: xlsxwriter.worksheet.Worksheet):
-    a = partial(defaultdict, int)
-    data = defaultdict(a)
-
+def _export_worksheet_items(site_name: str, item_class, row: int, sheet: xlsxwriter.worksheet.Worksheet) -> int:
     begin = datetime.datetime(2020, 1, 10)
     for idx, keyword in enumerate(KEYWORDS, 1):
         items = item_class.objects(keyword=keyword).order_by('-date')
         for item in items:
             if item.publish < begin:
                 continue
+            row = _export_item(sheet, row, site_name, item)
+    return row
 
-            public_str = _get_date_str(item.publish)
-            data[public_str][keyword] += 1
-        sheet.write(0, idx, keyword)
 
-    order_keys = sorted(data.keys(), reverse=True)
+def _export_header(sheet: xlsxwriter.worksheet.Worksheet, row: int):
+    col = 0
+    sheet.write(row, col, '关键词')
+    col += 1
+    sheet.write(row, col, '发表时间')
+    col += 1
+    sheet.write(row, col, '来源网站')
+    col += 1
+    sheet.write(row, col, '报道标题')
 
-    date_iterator = datetime.datetime.strptime(order_keys[0], '%Y-%m-%d')
-    date_delta = datetime.timedelta(days=1)
-    row = 1
-    while date_iterator >= begin:
-        date_str = _get_date_str(date_iterator)
-        _write_row(sheet, row, date_str, data[date_str])
-        row += 1
-        date_iterator -= date_delta
+
+def _export_item(sheet: xlsxwriter.worksheet.Worksheet, row: int, site_name: str, item) -> int:
+    col = 0
+    sheet.write(row, col, item.keyword)
+    col += 1
+    public_str = _get_date_str(item.publish)
+    sheet.write(row, col, public_str)
+    col += 1
+    sheet.write(row, col, site_name)
+    col += 1
+    sheet.write(row, col, item.title)
+    return row + 1
 
 
 def _write_row(sheet: xlsxwriter.worksheet.Worksheet, row: int, key: str, data: dict):
