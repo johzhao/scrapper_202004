@@ -5,6 +5,7 @@ from mongoengine import connect
 
 import config
 from export.export_task_4 import export_task_4
+from model.sina_topic_v2 import WeiboTopicItem
 from model.task import Task
 
 log_format = ' %(asctime)s - %(levelname)s - %(filename)s - %(lineno)s - %(message)s'
@@ -188,6 +189,27 @@ def add_cctv_tasks(scheduler: Scheduler):
         scheduler.append_request_task(Task(url, '', '', metadata=metadata))
 
 
+def add_weibo_topic_list_tasks(scheduler: Scheduler):
+    for keyword in config.KEYWORDS:
+        search_key = urllib.parse.quote(keyword)
+        url = f'https://s.weibo.com/topic?q={search_key}&pagetype=topic&topic=1&Refer=weibo_topic'
+        metadata = {
+            'keyword': keyword,
+        }
+        scheduler.append_request_task(Task(url, '', '', metadata=metadata))
+
+
+def add_weibo_info_tasks(scheduler: Scheduler):
+    for item in WeiboTopicItem.objects().order_by('title'):
+        search_key = urllib.parse.quote(item.title)
+        url = f'https://m.s.weibo.com/ajax_topic/trend?q={search_key}&time=30d'
+        metadata = {
+            'keyword': item.keyword,
+            'title': item.title,
+        }
+        scheduler.append_request_task(Task(url, '', '', metadata=metadata))
+
+
 def export():
     # export_task_3('./output/task_1_2.xlsx')
     export_task_4('./output/task_4_v2.xlsx')
@@ -210,6 +232,8 @@ def main():
     # add_china_cdc_tasks(scheduler)
     # add_china_tasks(scheduler)
     # add_cctv_tasks(scheduler)
+    # add_weibo_topic_list_tasks(scheduler)
+    # add_weibo_info_tasks(scheduler)
 
     # scheduler.start()
     # scheduler.join()

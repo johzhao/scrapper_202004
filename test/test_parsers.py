@@ -44,7 +44,7 @@ def test_weibo_parser():
 def test_topic_list_parser():
     data = _load_html_file('./test_files/topic_list.html')
     url = 'https://s.weibo.com/topic?q=%E7%96%AB%E6%83%85&pagetype=topic&topic=1&Refer=weibo_topic&page=2'
-    task = Task(url, '', '')
+    task = Task(url, '', '', metadata={'keyword': '疫情'})
     parser = get_parser(url)
     _parse(parser, task, data)
 
@@ -155,6 +155,14 @@ def test_the_paper_list_parser():
     url = 'https://www.thepaper.cn/searchResult.jsp?inpsearch=%E7%96%AB%E6%83%85'
     task = Task(url, '', '')
     data = _load_html_file('./test_files/the_paper_list.html')
+    parser = get_parser(url)
+    _parse(parser, task, data)
+
+
+def test_weibo_topic_detail_parser():
+    url = 'https://m.s.weibo.com/ajax_topic/trend?q=%23疫情%23&time=30d'
+    task = Task(url, '', '', metadata={'keyword': '疫情', 'title': '#疫情#'})
+    data = _load_html_file('./test_files/weibo_topic_info.json')
     parser = get_parser(url)
     _parse(parser, task, data)
 

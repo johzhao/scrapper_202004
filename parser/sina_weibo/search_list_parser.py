@@ -6,7 +6,6 @@ from lxml import etree
 # noinspection PyProtectedMember
 from lxml.etree import _Element
 
-from config import KEYWORD
 from model.sina_weibo import SinaWeibo
 from parser.parser import Parser
 

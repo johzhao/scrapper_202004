@@ -1,13 +1,14 @@
 import logging
 import re
-from datetime import datetime
+from typing import Optional
+from urllib.parse import urlparse, urlunparse
 
 from lxml import etree
 # noinspection PyProtectedMember
 from lxml.etree import _Element
 
-from config import KEYWORD
-from model.sina_topic import SinaTopic
+from model.sina_topic_v2 import WeiboTopicItem
+from model.task import Task
 from parser.parser import Parser
 
 logger = logging.getLogger(__name__)
@@ -15,12 +16,12 @@ logger.addHandler(logging.NullHandler())
 
 
 class TopicListParser(Parser):
-    read_comment_count_pattern = re.compile(r'(.+)?讨论\s(.+)?阅读')
+    next_page_href_pattern = re.compile(r'page=(\d+)')
 
     def __init__(self):
         super().__init__()
 
-    def parse(self, url: str, content: str):
+    def parse(self, task: Task, content: str):
         html = etree.HTML(content, etree.HTMLParser())
         elements = html.xpath('//div[contains(@class, "card")]/div[@class="info"]')
         if len(elements) == 0:
@@ -28,18 +29,17 @@ class TopicListParser(Parser):
 
         items = []
         for element in elements:
-            name, url = self._parse_topic_name_and_url(element)
-            read_count, comment_count = self._parse_read_and_comment_count(element)
+            name, _ = self._parse_topic_name_and_url(element)
 
-            item = SinaTopic()
-            item.keyword = KEYWORD
-            item.topic = name
-            item.url = url
-            item.read_count = read_count
-            item.comment_count = comment_count
-            item.created = datetime.now()
+            item = WeiboTopicItem()
+            item.keyword = task.metadata['keyword']
+            item.title = name
 
             items.append(item)
+
+        new_task = self._parse_next_task(task, html)
+        if new_task:
+            yield new_task
 
         for item in items:
             yield item
@@ -52,14 +52,24 @@ class TopicListParser(Parser):
         url = elements[0].attrib['href']
         return name, url
 
-    def _parse_read_and_comment_count(self, html: _Element) -> (str, str):
-        elements = html.xpath('p')
+    def _parse_next_task(self, task: Task, html: _Element) -> Optional[Task]:
+        elements = html.xpath('//a[@class="next"]')
         if not elements:
-            raise Exception('Failed to find topic name.')
+            return None
 
-        data = elements[-1].text
-        matchs = self.read_comment_count_pattern.findall(data)
-        if not matchs:
-            raise Exception('Failed to parse the read and comment count')
+        url = elements[0].attrib['href']
+        next_page_url_components = urlparse(url)
+        query = next_page_url_components.query
+        matches = self.next_page_href_pattern.findall(query)
+        if not matches:
+            return None
 
-        return matchs[0][0], matchs[0][1]
+        page_num = int(matches[0])
+        if page_num > 50:
+            return None
+
+        task_url_components = urlparse(task.url)
+        new_task_url = urlunparse((task_url_components.scheme, task_url_components.netloc, task_url_components.path,
+                                   task_url_components.params, next_page_url_components.query,
+                                   task_url_components.fragment))
+        return Task(new_task_url, '', task.url, metadata=task.metadata)

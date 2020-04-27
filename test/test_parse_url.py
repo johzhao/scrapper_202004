@@ -37,6 +37,18 @@ def parse_url_v3():
     print('')
 
 
+def test_parse_url_v4():
+    original_url = 'https://s.weibo.com/topic?q=%E7%96%AB%E6%83%85&pagetype=topic&topic=1&Refer=weibo_topic&page=50'
+    url = '/topic?q=%E7%96%AB%E6%83%85&pagetype=topic&topic=1&Refer=weibo_topic&page=51'
+    url_components1 = urlparse(original_url)
+    url_components2 = urlparse(url)
+    # fields = url_components.path.split('/')
+    # topic = unquote(fields[-1])
+    comment_url = urlunparse((url_components1.scheme, url_components1.netloc, url_components1.path, url_components1.params,
+                              url_components2.query, url_components1.fragment))
+    print('')
+
+
 if __name__ == '__main__':
     # parse_url()
     # parse_url_v2()
