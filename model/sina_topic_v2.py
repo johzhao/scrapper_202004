@@ -1,12 +1,12 @@
 import datetime
 
+from mongoengine import Document
 from mongoengine import IntField, DateTimeField, StringField
-from model.parsed_result_item import ParsedResultItem
 
 
-class WeiboTopicItem(ParsedResultItem):
+class WeiboTopicItem(Document):
     keyword = StringField(required=True)
-    title = StringField(required=True, unique_with=['_cls', 'keyword'])
+    title = StringField(required=True, unique_with=['keyword'])
     url = StringField(required=True)
 
     @classmethod
@@ -17,10 +17,10 @@ class WeiboTopicItem(ParsedResultItem):
         return f'<Weibo topic item keyword={self.keyword}, title={self.title}, url={self.url}>'
 
 
-class WeiboTopicDetailItem(ParsedResultItem):
+class WeiboTopicDetailItem(Document):
     keyword = StringField(required=True)
     title = StringField(required=True)
-    date = DateTimeField(required=True, unique_with=['_cls', 'keyword', 'title'])
+    date = DateTimeField(required=True, unique_with=['keyword', 'title'])
     read_count = IntField()
     discus_count = IntField()
     create_count = IntField()
@@ -29,7 +29,7 @@ class WeiboTopicDetailItem(ParsedResultItem):
     @classmethod
     def store_item(cls, item: 'WeiboTopicDetailItem'):
         item.created = datetime.datetime.now()
-        cls.objects(keyword=item.keyword, title=item.title, date=item.date).\
+        cls.objects(keyword=item.keyword, title=item.title, date=item.date). \
             update_one(read_count=item.read_count, discus_count=item.discus_count,
                        create_count=item.create_count, created=item.created, upsert=True)
 

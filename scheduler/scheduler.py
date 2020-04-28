@@ -2,9 +2,10 @@ import logging
 import threading
 import time
 
+from mongoengine import Document
+
 import config
 from downloader.downloader import Downloader
-from model.parsed_result_item import ParsedResultItem
 from model.task import Task
 from parser.parser_builder import get_parser
 from scheduler.task_queue import TaskQueue
@@ -56,7 +57,7 @@ class Scheduler(threading.Thread):
                 if isinstance(item, Task):
                     logger.info(f'Append new task {item}')
                     self.task_queue.push_task(item)
-                elif isinstance(item, ParsedResultItem):
+                elif isinstance(item, Document):
                     logger.info(f'Save the parsed item {item}')
                     item.__class__.store_item(item)
                 else:
