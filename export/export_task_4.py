@@ -1,12 +1,9 @@
 import datetime
-from collections import defaultdict
-from functools import partial
 
 import xlsxwriter
 import xlsxwriter.worksheet
 
 from model import task_4_items
-
 
 MODELS = {
     '央广网': task_4_items.CnrItem,
