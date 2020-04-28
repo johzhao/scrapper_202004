@@ -218,7 +218,7 @@ def export():
 def main():
     connect(config.MONGO_DATABASE, host=config.MONGO_HOST, port=config.MONGO_PORT)
 
-    # scheduler = Scheduler()
+    scheduler = Scheduler()
 
     # add_topic_search_tasks(scheduler)
     # add_topic_detail_tasks(scheduler)
@@ -235,8 +235,8 @@ def main():
     # add_weibo_topic_list_tasks(scheduler)
     # add_weibo_info_tasks(scheduler)
 
-    # scheduler.start()
-    # scheduler.join()
+    scheduler.start()
+    scheduler.join()
 
     # export()
 

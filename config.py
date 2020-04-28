@@ -20,14 +20,14 @@ HEADERS = {
 
 MONGO_HOST = 'localhost'
 MONGO_PORT = 27017
-MONGO_DATABASE = 'task_4_v2'
+MONGO_DATABASE = 'task_4_2_v1'
 
 
 REDIS_DB_URL = 'redis://localhost:6379'
 REDIS_DB_DATABASE = 0
 
 
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 8
 
 KEYWORDS = [
     '新冠',

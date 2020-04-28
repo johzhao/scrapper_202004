@@ -29,11 +29,12 @@ class TopicListParser(Parser):
 
         items = []
         for element in elements:
-            name, _ = self._parse_topic_name_and_url(element)
+            name, url = self._parse_topic_name_and_url(element)
 
             item = WeiboTopicItem()
             item.keyword = task.metadata['keyword']
             item.title = name
+            item.url = url
 
             items.append(item)
 

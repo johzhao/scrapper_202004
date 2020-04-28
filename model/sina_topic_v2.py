@@ -6,7 +6,7 @@ from model.parsed_result_item import ParsedResultItem
 
 class WeiboTopicItem(ParsedResultItem):
     keyword = StringField(required=True)
-    title = StringField(required=True, unique_with=['keyword'])
+    title = StringField(required=True, unique_with=['_cls', 'keyword'])
     url = StringField(required=True)
 
     @classmethod
@@ -20,7 +20,7 @@ class WeiboTopicItem(ParsedResultItem):
 class WeiboTopicDetailItem(ParsedResultItem):
     keyword = StringField(required=True)
     title = StringField(required=True)
-    date = DateTimeField(required=True, unique_with=['keyword', 'title'])
+    date = DateTimeField(required=True, unique_with=['_cls', 'keyword', 'title'])
     read_count = IntField()
     discus_count = IntField()
     create_count = IntField()

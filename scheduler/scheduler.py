@@ -54,6 +54,7 @@ class Scheduler(threading.Thread):
             parser = get_parser(task.url)
             for item in parser.parse(task, content):
                 if isinstance(item, Task):
+                    logger.info(f'Append new task {item}')
                     self.task_queue.push_task(item)
                 elif isinstance(item, ParsedResultItem):
                     logger.info(f'Save the parsed item {item}')
