@@ -5,6 +5,7 @@ from mongoengine import connect
 
 import config
 from export.export_task_4 import export_task_4
+from export.export_task_4_weibo import export_task_4_weibo
 from model.sina_topic_v2 import WeiboTopicItem
 from model.task import Task
 
@@ -212,7 +213,8 @@ def add_weibo_info_tasks(scheduler: Scheduler):
 
 def export():
     # export_task_3('./output/task_1_2.xlsx')
-    export_task_4('./output/task_4_v2.xlsx')
+    # export_task_4('./output/task_4_v2.xlsx')
+    export_task_4_weibo('./output/task_4_weibo.xlsx')
 
 
 def main():
@@ -235,10 +237,10 @@ def main():
     # add_weibo_topic_list_tasks(scheduler)
     # add_weibo_info_tasks(scheduler)
 
-    scheduler.start()
-    scheduler.join()
+    # scheduler.start()
+    # scheduler.join()
 
-    # export()
+    export()
 
 
 if __name__ == '__main__':
